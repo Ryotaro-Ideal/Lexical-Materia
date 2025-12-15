@@ -1,0 +1,26 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+.vscode/
+.vs/
+*.csproj
+*.sln
+*.user
+*.userprefs
+
+.DS_Store
+Thumbs.db
+
+Assets/Assets/
+Assets/TextMesh Pro
+Assets/TutorialInfo/
+Assets/Material/
+Assets/Scenes/
+Assets/Prefab/
+
+UserSettings/

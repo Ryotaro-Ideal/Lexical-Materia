@@ -13,7 +13,9 @@ public enum ItemType
 public class ItemData : ScriptableObject
 {
     [Header("基本情報")]
-    public string itemID;
+
+    [Header("識別子: (1:Tool, 2:Consumable, 3:Material) + 3桁の数字")]
+    public string ID;
     public string itemName;
 
     public GameObject visualPrefab;
@@ -31,7 +33,7 @@ public class ItemData : ScriptableObject
 
     public List<LetterData> destroyMaterials = new List<LetterData>();
 
-    public List<LetterData> craftMaterials = new List<LetterData>();
+
 
     [Header("装備性能 (Equipment Typeの場合のみ使用)")]
     public int baseAttackPower = 0;

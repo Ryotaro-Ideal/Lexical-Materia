@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adce05d43b8b2e4bacab5bc90f2e277, type: 3}
+  m_Name: Banana_Craft
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 0def0d9b98b44874aa055d58cb257275, type: 2}
+  requiredLetters:
+  - letterData: {fileID: 11400000, guid: 26b2aef25cd40b24d8e5b0ec65d03142, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 77385e3661185b741b0387b22dad1d20, type: 2}
+    count: 2

@@ -24,6 +24,7 @@ public class LetterInvManager : MonoBehaviour
     }
     public void SetLetters(List<SlotEntry> slots)
     {
+        Debug.Log("LetterInvManager: SetLetters発火");
         foreach (var slot in slots)
         {
             int count = slot.count;
@@ -36,7 +37,7 @@ public class LetterInvManager : MonoBehaviour
                     if (l.letterData == null) continue;
                     if (l.letterData == s)
                     {
-                        l.SetItem(count);
+                        l.AddCount(count);
                     }
                 }
             }

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adce05d43b8b2e4bacab5bc90f2e277, type: 3}
+  m_Name: Apple_Craft
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: bd263db04dca1ac4fb927800ffa2f8df, type: 2}
+  requiredLetters:
+  - letterData: {fileID: 11400000, guid: 91bf0d3b112746946b1ce94aed8a2b68, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 733470b3e2147eb459eed151f7541c87, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: ef209e4596121b149b4edb31f944d4ac, type: 2}
+    count: 1

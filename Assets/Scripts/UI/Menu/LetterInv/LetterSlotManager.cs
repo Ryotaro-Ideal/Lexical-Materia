@@ -1,59 +1,87 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Button))]
-public class LetterSlotManager : MonoBehaviour
+public class LetterSlotManager : SlotBase
 {
     public int slotIndex = -1;
 
     [SerializeField] private int count = 0;
-
     public LetterData letterData;
+    public TMP_Text iconText;
+    public Color activeColor;
 
-    [Header("UI References")]
-    public TMP_Text countText;
-
-
-    [Header("Tooltip")]
-    public TooltipUI toolTipUI;
-    public Vector2 toolTipOffset = new Vector2(12f, -18f);
-
-    private InventorySlotManager inv => InventorySlotManager.Instance;
-
-
-
-
-    public Sprite UIMaskSprite;
-
-    void Awake()
+    protected override void Awake()
     {
-        countText.enabled = true;
-        SetItem(0);
+        base.Awake();
+
         var btn = GetComponent<Button>();
         if (btn != null) btn.onClick.AddListener(OnSlotClicked);
-        //slot番号は自分が今いる場所から取得
-        slotIndex = transform.GetSiblingIndex();
 
+        slotIndex = transform.GetSiblingIndex();
     }
 
-    // ---------------- UI ----------------
+    // ---------------- データ操作 ----------------
 
-    public void SetItem(int c)
+    public void AddCount(int c)
     {
+        Debug.Log("LetterSlotManager: AddCount発火");
         count += c;
         countText.enabled = true;
         countText.text = count > 0 ? count.ToString() : "0";
         countText.raycastTarget = false;
+    }
+    public void SetLetter(LetterData data, int c)
+    {
+        letterData = data;
+        iconText.text = data.letterName;
+        count = c;
+        countText.enabled = true;
+        countText.text = count > 0 ? count.ToString() : "0";
+        countText.raycastTarget = false;
+        icon.color = activeColor;
+    }
+    public void ClearLetter()
+    {
+        letterData = null;
+        iconText.text = "";
+        count = 0;
+        icon.color = slotColor;
+    }
+
+    protected override string GetDisplayName()
+    {
+        return letterData != null ? letterData.letterName : "";
+    }
+
+    protected override Sprite GetIcon()
+    {
+        return icon != null ? icon.sprite : null;
+    }
+
+    // ---------------- SlotBase 抽象実装 ----------------
+
+    protected override bool HasItem()
+    {
+        return letterData != null && count > 0;
+    }
+
+
+
+    protected override void OnDropSlot(SlotBase other)
+    {
+        // 今回は LetterSlot 同士の処理は未実装
+        // 必要になったらここに書く
     }
 
     // ---------------- Click ----------------
 
     private void OnSlotClicked()
     {
+        if (!HasItem())
+            return;
 
+        Debug.Log($"LetterSlot {slotIndex}: {letterData.letterName} x{count}");
     }
-
-
 }

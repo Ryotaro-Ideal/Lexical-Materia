@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9254ef7013783345b57817ba9ab4ce6, type: 3}
   m_Name: Apple_Data
   m_EditorClassIdentifier: 
-  itemID: 
+  ID: 2001
   itemName: "\u308A\u3093\u3054"
   visualPrefab: {fileID: 343654337670435288, guid: 9f173687c201df143bc3b08a8db09964, type: 3}
   prefab: {fileID: 343654337670435288, guid: ec55897118b7ef8499d0355fc9b9f3ad, type: 3}
@@ -21,10 +21,6 @@ MonoBehaviour:
   description: "\u3053\u3053\u3067\u306F\u3082\u3063\u3068\u3082\u4E00\u822C\u7684\u306A\u30D5\u30EB\u30FC\u30C4\n\u304B\u3058\u308B\u3068\u591A\u5C11\u306E\u6E80\u8179\u611F\u304C\u5F97\u3089\u308C\u3001\u96C6\u4E2D\u529B\u304C\u5897\u3059"
   maxStack: 99
   destroyMaterials:
-  - {fileID: 11400000, guid: 91bf0d3b112746946b1ce94aed8a2b68, type: 2}
-  - {fileID: 11400000, guid: 733470b3e2147eb459eed151f7541c87, type: 2}
-  - {fileID: 11400000, guid: ef209e4596121b149b4edb31f944d4ac, type: 2}
-  craftMaterials:
   - {fileID: 11400000, guid: 91bf0d3b112746946b1ce94aed8a2b68, type: 2}
   - {fileID: 11400000, guid: 733470b3e2147eb459eed151f7541c87, type: 2}
   - {fileID: 11400000, guid: ef209e4596121b149b4edb31f944d4ac, type: 2}

@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adce05d43b8b2e4bacab5bc90f2e277, type: 3}
+  m_Name: CraftData_Grape
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: f46c4a63a94f8834881e29278a63e047, type: 2}
+  requiredLetters:
+  - letterData: {fileID: 11400000, guid: 1a023e696b69a614aa9f738e6579fc68, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: dda523afeca8bed45bab742e60912ede, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 1b022241724922046bf739967aa7a564, type: 2}
+    count: 1

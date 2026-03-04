@@ -1,3 +1,4 @@
+# --- Unityが自動生成する一時フォルダ (Git管理不要) ---
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -5,22 +6,27 @@
 [Bb]uilds/
 [Ll]ogs/
 [Mm]emoryCaptures/
+UserSettings/
 
+# --- IDE(VSCode/Visual Studio)が生成するファイル ---
 .vscode/
 .vs/
 *.csproj
 *.sln
 *.user
 *.userprefs
+*.suo
 
-.DS_Store
-Thumbs.db
-
-Assets/Assets/
+# --- プロジェクト内のバックアップや一時ファイル ---
+Backup/
+[Aa]ssets/Backup/
+Assets/Plugins/
 Assets/TextMesh Pro
 Assets/TutorialInfo/
-Assets/Material/
-Assets/Scenes/
-Assets/Prefab/
+*.tmp
+*.pdb
+*.mdb
 
-UserSettings/
+# --- OS固有の不要ファイル ---
+.DS_Store
+Thumbs.db

@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9254ef7013783345b57817ba9ab4ce6, type: 3}
   m_Name: ItemData_Stick
   m_EditorClassIdentifier: 
-  ID: 1001
+  ID: 1002
   itemName: "\u6728\u306E\u679D"
   visualPrefab: {fileID: 3471526635603019834, guid: 6e077f051dea8a5439828a960a9ed1f9, type: 3}
-  prefab: {fileID: 3471526635603019834, guid: 122751db27644bd4f9e5f938582b8ae7, type: 3}
   icon: {fileID: 21300000, guid: 4abb129e1df85e94d98986b1333abf90, type: 3}
   itemType: 1
   description: "\u305D\u3053\u3089\u8FBA\u306B\u843D\u3061\u3066\u3044\u308B\u666E\u901A\u306E\u679D\n\u306A\u305C\u304B\u7834\u58CA\u3057\u3066\u307F\u305F\u3044\u6C17\u6301\u3061\u306B\u306A\u308B"

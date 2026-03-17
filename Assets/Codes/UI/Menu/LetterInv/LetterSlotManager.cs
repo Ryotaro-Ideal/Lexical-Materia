@@ -16,7 +16,7 @@ public class LetterSlotManager : SlotBase
     protected override void Awake()
     {
         base.Awake();
-
+        if (letterData != null) iconText.text = letterData.letterName;
         var btn = GetComponent<Button>();
         if (btn != null) btn.onClick.AddListener(OnSlotClicked);
 

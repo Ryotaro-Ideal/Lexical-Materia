@@ -7,14 +7,11 @@ public class Attack_Punch : AttackBase
     public float coneHalfAngle = 60f;
     [SerializeField] private LayerMask targetLayer;
 
-
-
-
     //扇形で判定し、IDamageableを持つオブジェクトにダメージを与える
-    public override void ExcecuteAttack(Animator animator)
+    public override void ExcecuteAttack(AnimationController animController)
     {
-        Debug.Log("Attack_Punch: ExcecuteAttack called");
-        animator.SetTrigger("Attack_Punch");
+        ItemData equippedItem = EquipController.Instance?.GetEquippedItem();
+        animController.TriggerAttack();
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, pickupDistance, targetLayer);
         foreach (var hitCollider in hitColliders)
         {
@@ -26,8 +23,14 @@ public class Attack_Punch : AttackBase
                 IDamageable damageable = hitCollider.GetComponent<IDamageable>();
                 if (damageable != null)
                 {
-                    Debug.Log("Attack_Punch: Damaging " + hitCollider.name);
-                    damageable.TakeDamage(1);
+                    int damage = 1;
+                    if (equippedItem != null)
+                    {
+                        damage = equippedItem.baseAttackPower;
+                        Debug.Log("Attack_Punch:" + equippedItem.itemName);
+                    }
+                    Debug.Log("Attack_Punch: Damaging " + damage);
+                    damageable.TakeDamage(damage);
                 }
             }
         }

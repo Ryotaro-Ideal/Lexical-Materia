@@ -8,12 +8,13 @@ public class MoveController : MonoBehaviour
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float dashSpeed = 10f;
 
-    private float gravity = -15f;
-    private float rotationSpeed = 20f;
+    [SerializeField] private float gravity = -15f;
+    [SerializeField] private float rotationSpeed = 20f;
 
     private CharacterController cc;
     private InputHandler input;
 
+    private AnimationController animController;
     private Vector3 velocity;
     private bool isGrounded;
 
@@ -23,6 +24,7 @@ public class MoveController : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         input = GetComponent<InputHandler>();
+        animController = GetComponent<AnimationController>();
         cam = Camera.main.transform;
     }
 
@@ -54,6 +56,7 @@ public class MoveController : MonoBehaviour
 
         // Move
         cc.Move(moveDir * speed * Time.deltaTime);
+        animController.SetMovement(moveDir.magnitude, input.DashHeld, isGrounded);
 
         // Look (移動方向に向ける)
         if (moveDir.sqrMagnitude > 0.01f)
@@ -62,12 +65,12 @@ public class MoveController : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // ジャンプ
         if (input.JumpPressed && isGrounded)
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-
-        // 重力
-        velocity.y += gravity * Time.deltaTime;
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * 2f * gravity);
+            animController.TriggerJump();
+        }
+        velocity.y += -gravity * Time.deltaTime;
         cc.Move(velocity * Time.deltaTime);
     }
 }

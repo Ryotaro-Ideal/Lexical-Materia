@@ -102,7 +102,7 @@ public class InputHandler : MonoBehaviour
     // インタラクトボタン（既存のアイテム取得キー）が押されたら
     public void OnInteractPressed()
     {
-        PickupItemManager pickupItemManager = GetComponent<PickupItemManager>();
+        PickupItemManager pickupItemManager = FindFirstObjectByType<PickupItemManager>();
         if (pickupItemManager == null) return;
 
         IInteractable target = pickupItemManager.GetTargetItem();

@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System;
+using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +11,9 @@ public class GameManager : MonoBehaviour
 
     public enum GameState { Playing, Victory, GameOver }
     public GameState CurrentState { get; private set; }
+    public UnityEvent<string> OnVictory;
+    public UnityEvent OnGameOver;
+    [SerializeField] private string nextSceneName = "";
 
     [SerializeField] private List<EnemyBase> enemies = new List<EnemyBase>();
     private int enemyCount;
@@ -28,7 +33,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CurrentState = GameState.Playing;
-        // シーン内の全敵を初期カウント（実行時に配置されたもの）
         RefreshEnemyCount();
     }
 
@@ -61,16 +65,20 @@ public class GameManager : MonoBehaviour
 
     private void WinGame()
     {
+
         CurrentState = GameState.Victory;
         Debug.Log("Game Clear!");
-        FindFirstObjectByType<ResultUI>().ShowResult(true);
+        OnVictory?.Invoke(nextSceneName);
+        FindFirstObjectByType<ResultUI>()?.ShowResult(true);
+
     }
 
     private void LoseGame()
     {
         CurrentState = GameState.GameOver;
         Debug.Log("Game Over...");
-        FindFirstObjectByType<ResultUI>().ShowResult(false);
+        OnGameOver?.Invoke();
+        FindFirstObjectByType<ResultUI>()?.ShowResult(false);
     }
 
     public void RestartGame()

@@ -3,11 +3,11 @@ using UnityEngine;
 public class AttackController : MonoBehaviour
 {
     private AttackBase currentAttack;
-    private Animator animator;
+    private AnimationController animController;
     [SerializeField] private AttackBase[] attacks;
     void Awake()
     {
-        animator = GetComponent<Animator>();
+        animController = GetComponent<AnimationController>();
         if (attacks.Length == 0)
         {
             Debug.Log("AttackController: No attacks assigned");
@@ -23,7 +23,7 @@ public class AttackController : MonoBehaviour
     public void Attack()
     {
         Debug.Log("AttackController: Attack called");
-        currentAttack?.ExcecuteAttack(animator);
+        currentAttack?.ExcecuteAttack(animController);
     }
     public void SetAttack(AttackBase newAttack)
     {

@@ -41,7 +41,6 @@ public class ItemData : ScriptableObject
 
 
     [Header("装備性能 (Tool Typeの場合のみ使用)")]
-    public int baseAttackPower = 0;
-    public int baseDefendPower = 0;
+    public int baseAttackPower = 1;
 
 }

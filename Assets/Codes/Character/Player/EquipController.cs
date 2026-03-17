@@ -1,12 +1,8 @@
 using UnityEngine;
 
-/// <summary>
-/// 装備（手に持つ）を管理するシンプルなコントローラ。
-/// - EquipFromInventorySlot(int slotIndex) を呼ばれると、その slot のアイテムを参照して装備する。
-/// - 実モデルの表示は prefab を用意して Instantiate / Destroy で切替える（ここではアイコン表示や簡易モデル表示を想定）。
-/// </summary>
 public class EquipController : MonoBehaviour
 {
+    public static EquipController Instance { get; private set; }
     private InventorySlotManager inventorySlotManager = InventorySlotManager.Instance; // インベントリスロットの管理クラス（シングルトン想定）
     public Transform handTransform; // 手の位置に装備モデルを出す場合
     public GameObject modelRoot;    // 装備モデルのルート（生成物はここに置く）
@@ -14,8 +10,14 @@ public class EquipController : MonoBehaviour
     private ItemData equippedItem;
     private int equippedCount;
 
+
+    // 現在装備しているアイテムを返す
+    public ItemData GetEquippedItem() => equippedItem;
+
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+
         if (inventorySlotManager == null) inventorySlotManager = InventorySlotManager.Instance;
     }
 

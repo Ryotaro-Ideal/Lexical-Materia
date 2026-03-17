@@ -13,10 +13,10 @@ public class LetterInvManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        letterSlots = gameObject.GetComponentsInChildren<LetterSlotManager>();
+        letterSlots = gameObject.GetComponentsInChildren<LetterSlotManager>(true);
     }
 
-    // Update is called once per frame
+
     void Update()
     {
 
@@ -26,21 +26,23 @@ public class LetterInvManager : MonoBehaviour
         Debug.Log("LetterInvManager: SetLetters発火");
         foreach (var slot in slots)
         {
+            if (slot.item == null) continue;
+
             ItemData item = slot.item;
             List<DestroyMaterial> letters = item.destroyMaterials;
             foreach (var s in letters)
             {
                 foreach (var l in letterSlots)
                 {
-                    int count = s.count;
                     if (l.letterData == null) continue;
                     if (l.letterData == s.letterData)
                     {
-                        l.AddCount(count);
+                        // アイティムの個数(slot.count)を掛ける
+                        int totalAddCount = s.count * slot.count;
+                        l.AddCount(totalAddCount);
                     }
                 }
             }
-
         }
     }
     public int GetCount(DestroyMaterial requiredLetter)

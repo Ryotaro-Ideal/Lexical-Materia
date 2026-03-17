@@ -12,12 +12,9 @@ public class HotbarManager : MonoBehaviour
     public InventorySlotManager inventoryManager; // シーンの InventorySlotManager
     public SlotManager[] hotbarSlots;             // ホットバー上の SlotManager UI (表示用)
 
-    public EquipController equipController;       // 装備を担当するコンポーネント（プレイヤー）
-
     private void Awake()
     {
         if (inventoryManager == null) inventoryManager = InventorySlotManager.Instance;
-        if (equipController == null) equipController = FindFirstObjectByType<EquipController>();
 
         // UIがクリックされたときのコールバックを登録
         for (int i = 0; i < hotbarSlots.Length; i++)
@@ -93,7 +90,7 @@ public class HotbarManager : MonoBehaviour
         if (entry == null || entry.IsEmpty()) return;
 
         // 装備要求（EquipController が対応）
-        equipController?.EquipFromInventorySlot(s, s.slotIndex);
+        EquipController.Instance.EquipFromInventorySlot(s, s.slotIndex);
     }
 
     // 外部から特定 Inventory スロットが変化したときに呼ぶ補助

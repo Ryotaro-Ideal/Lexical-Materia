@@ -571,8 +571,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 5
-  moveSpeed: 0.5
+  collideDamage: 1
+  moveSpeed: 0
   chaseSpeed: 3
+  dropItem: {fileID: 0}
   animator: {fileID: 3358792499278597150}
 --- !u!4 &1356551152950800504 stripped
 Transform:

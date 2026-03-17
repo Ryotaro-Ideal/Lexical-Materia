@@ -17,6 +17,11 @@ public class SlotManager : SlotBase, IPointerEnterHandler, IPointerExitHandler
 
     InventorySlotManager inv => InventorySlotManager.Instance;
 
+    protected override void Awake()
+    {
+        base.Awake();
+    }
+
     public void SetItem(ItemData item, int count)
     {
         if (item == null || count <= 0) { ClearSlot(); return; }

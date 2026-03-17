@@ -11,6 +11,9 @@ public class InventorySlotManager : MonoBehaviour
     public SlotManager[] consumableSlots;
     public SlotManager[] inventorySlots;
 
+    [Header("開始時に所持させるアイテム")]
+    public ItemData[] startItems;
+
     // 内部データ
     public SlotEntry[] toolEntries;
     public SlotEntry[] consumableEntries;
@@ -34,6 +37,15 @@ public class InventorySlotManager : MonoBehaviour
         InitializeEntries(toolEntries);
         InitializeEntries(consumableEntries);
         InitializeEntries(inventoryEntries);
+
+        // 開始アイテムの配布
+        if (startItems != null)
+        {
+            foreach (var item in startItems)
+            {
+                if (item != null) AutoPlaceItem(item, 1);
+            }
+        }
 
         RefreshUI();
     }
@@ -163,12 +175,13 @@ public class InventorySlotManager : MonoBehaviour
         if (item.itemType == ItemType.Consumable) TryPlace(consumableEntries);
 
         TryPlace(inventoryEntries);
+        RefreshUI();
         if (remaining <= 0)
         {
-            SoundManager.Instance.PlaySE(SoundName.ItemPickUp);
+            SoundManager.Instance?.PlaySE(SoundName.ItemPickUp);
         }
 
-        RefreshUI();
+
         return remaining == 0;
     }
 

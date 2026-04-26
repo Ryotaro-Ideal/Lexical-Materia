@@ -28,10 +28,18 @@ public class PickupItemManager : MonoBehaviour
     private IInteractable lastShownHover;
     private bool isTooltipShown = false;
 
+    // Collider と IInteractable をペアで保持する（クラスレベルで定義）
+    private struct Candidate
+    {
+        public IInteractable item;
+        public Vector3 closestPoint; // コライダー上のプレイヤーへの最近接点
+        public float distance;       // プレイヤーから最近接点までの距離
+    }
+
     void Awake()
     {
         mainCamera = Camera.main;
-        
+
         // シーン内のメインカメラを取得（再確認）
         if (mainCamera == null) mainCamera = Camera.main;
 
@@ -82,7 +90,7 @@ public class PickupItemManager : MonoBehaviour
             return false;
         }
 
-        List<IInteractable> candidates = new List<IInteractable>(cols.Length);
+        List<Candidate> candidates = new List<Candidate>(cols.Length);
         Vector3 forward = playerTransform.forward;
 
         foreach (var col in cols)
@@ -90,9 +98,14 @@ public class PickupItemManager : MonoBehaviour
             var item = col.GetComponent<IInteractable>();
             if (item == null) continue;
 
+            // pivotではなくコライダー表面の最近接点を使う
+            // → オブジェクトが大きくてもコライダーが範囲内なら正しく検知できる
+            Vector3 closest = col.ClosestPoint(playerTransform.position);
+            float dist = Vector3.Distance(playerTransform.position, closest);
+
             if (useCone)
             {
-                Vector3 toItem = item.GetPos() - playerTransform.position;
+                Vector3 toItem = closest - playerTransform.position;
                 Vector3 toItemH = new Vector3(toItem.x, 0f, toItem.z);
                 Vector3 forwardH = new Vector3(forward.x, 0f, forward.z);
                 if (toItemH.sqrMagnitude > 0.0001f)
@@ -101,7 +114,7 @@ public class PickupItemManager : MonoBehaviour
                     if (angle > coneHalfAngle) continue;
                 }
             }
-            candidates.Add(item);
+            candidates.Add(new Candidate { item = item, closestPoint = closest, distance = dist });
         }
 
         if (candidates.Count == 0)
@@ -110,24 +123,25 @@ public class PickupItemManager : MonoBehaviour
             return false;
         }
 
-        // 近いもの程優先するようにソート
+        // 最近接点を基準にソート（角度優先 → 距離でタイブレーク）
         candidates.Sort((a, b) =>
         {
-            Vector3 va = a.GetPos() - playerTransform.position;
-            Vector3 vb = b.GetPos() - playerTransform.position;
+            Vector3 va = a.closestPoint - playerTransform.position;
+            Vector3 vb = b.closestPoint - playerTransform.position;
             float angleA = Vector3.Angle(new Vector3(forward.x, 0, forward.z), new Vector3(va.x, 0, va.z));
             float angleB = Vector3.Angle(new Vector3(forward.x, 0, forward.z), new Vector3(vb.x, 0, vb.z));
             if (Mathf.Abs(angleA - angleB) > 0.01f) return angleA.CompareTo(angleB);
-            return va.sqrMagnitude.CompareTo(vb.sqrMagnitude);
+            return a.distance.CompareTo(b.distance);
         });
 
-        IInteractable target = candidates[0];
+        Candidate best = candidates[0];
+        IInteractable target = best.item;
 
-        // 距離チェック
+        // 距離チェック（コライダー最近接点ベース）
         float baseThreshold = pickupDistance * hoverShowDistanceMultiplier;
         float showThreshold = baseThreshold - distanceHysteresis;
         float hideThreshold = baseThreshold + distanceHysteresis;
-        float distToTarget = Vector3.Distance(playerTransform.position, target.GetPos());
+        float distToTarget = best.distance;
 
         bool shouldShow = isTooltipShown && lastShownHover == target ? distToTarget <= hideThreshold : distToTarget <= showThreshold;
 
@@ -137,6 +151,7 @@ public class PickupItemManager : MonoBehaviour
             lastShownHover = target;
             isTooltipShown = true;
 
+            // ツールチップ表示位置はpivotを使用（UIの見た目として自然なため）
             Vector3 screenPos = mainCamera.WorldToScreenPoint(target.GetPos());
             if (screenPos.z <= 0f)
             {

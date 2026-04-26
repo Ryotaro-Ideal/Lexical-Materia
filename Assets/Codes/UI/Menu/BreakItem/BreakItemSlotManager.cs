@@ -22,9 +22,7 @@ public class BreakItemSlotManager : SlotCollectionBase
 
     }
 
-    /// <summary>
-    /// Inventory から分解スロットへ移動
-    /// </summary>
+
     public bool MoveToBreakItemSlotFromInventory(SlotManager inventorySlot)
     {
         var inv = InventorySlotManager.Instance;

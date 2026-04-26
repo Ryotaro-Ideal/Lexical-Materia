@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using TMPro;
 
-[ExecuteAlways]
+
 public class AlphabetGridLayout : MonoBehaviour
 {
     [Header("セルレイアウト")]
@@ -34,17 +34,6 @@ public class AlphabetGridLayout : MonoBehaviour
     public bool setCharacterText = true;
     public string characterChildName = "Character";
 
-    private void OnValidate()
-    {
-        if (cellSize.x <= 0) cellSize.x = 1;
-        if (cellSize.y <= 0) cellSize.y = 1;
-        if (spacing.x < 0) spacing.x = 0;
-        if (spacing.y < 0) spacing.y = 0;
-        if (padding.x < 0) padding.x = 0;
-        if (padding.y < 0) padding.y = 0;
-
-        Rebuild();
-    }
 
     [ContextMenu("Rebuild Alphabet Grid (QWERTY)")]
     public void Rebuild()

@@ -50,7 +50,11 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: f740fefcec4e2304fae1643f09cb983f, type: 3}
     soundName: 0
   - clip: {fileID: 8300000, guid: a41355e1dba1c1f42838f2be2123e338, type: 3}
+    soundName: 1
+  - clip: {fileID: 8300000, guid: 7e892ad271c83ef429fb4aca7da7920d, type: 3}
     soundName: 2
+  - clip: {fileID: 8300000, guid: c8525b369b30c074c9eca51d24a53a90, type: 3}
+    soundName: 3
 --- !u!82 &4580892343916863530
 AudioSource:
   m_ObjectHideFlags: 0

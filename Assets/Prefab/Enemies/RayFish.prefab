@@ -671,6 +671,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: aa154e9fd2c241ef97254e0195862deb, type: 2}
+    - target: {fileID: 5892248315223525472, guid: 920f77fb8ff043f45b0f0b3d443a0d0e, type: 3}
+      propertyPath: chaseAngle
+      value: 90
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -703,9 +707,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 5
+  collideDamage: 1
   moveSpeed: 0
   chaseSpeed: 2
-  dropItem: {fileID: 0}
+  dropItem: {fileID: 5323671222910651515, guid: 9eb23ff4edc3130498a734a510923060, type: 3}
   animator: {fileID: 7295378418332142558}
 --- !u!4 &6445152346363475896 stripped
 Transform:

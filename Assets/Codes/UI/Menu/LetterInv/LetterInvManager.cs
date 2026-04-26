@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -5,8 +6,9 @@ using UnityEngine;
 public class LetterInvManager : MonoBehaviour
 {
     public static LetterInvManager Instance { get; private set; }
-    //スロットの種類(ひらがなやカタカナなど)とスロットマネージャーの情報が入った二次元リストを作成
     [SerializeField] LetterSlotManager[] letterSlots;
+
+    public event Action OnLetterChanged;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -37,13 +39,14 @@ public class LetterInvManager : MonoBehaviour
                     if (l.letterData == null) continue;
                     if (l.letterData == s.letterData)
                     {
-                        // アイティムの個数(slot.count)を掛ける
+                        // アイテムの個数(slot.count)を掛ける
                         int totalAddCount = s.count * slot.count;
                         l.AddCount(totalAddCount);
                     }
                 }
             }
         }
+        OnLetterChanged?.Invoke();
     }
     public int GetCount(DestroyMaterial requiredLetter)
     {
@@ -100,6 +103,43 @@ public class LetterInvManager : MonoBehaviour
 
             }
         }
+        OnLetterChanged?.Invoke();
+    }
 
+    // ===== セーブ・ロード =====
+
+    /// <summary>文字インベントリの現在状態をSaveDataに書き込む</summary>
+    public void WriteSaveData(SaveData data)
+    {
+        data.letters.Clear();
+        foreach (var slot in letterSlots)
+        {
+            if (slot.letterData == null || slot.Count <= 0) continue;
+            data.letters.Add(new LetterSaveEntry(slot.letterData.letterName, slot.Count));
+        }
+    }
+
+    /// <summary>SaveDataから文字インベントリを復元する</summary>
+    public void ReadSaveData(SaveData data)
+    {
+        if (data == null || data.letters == null) return;
+
+        // カウントのみリセット（letterDataは保持してletterNameによる検索を維持する）
+        foreach (var slot in letterSlots)
+            slot.ResetCount();
+
+        // letterNameで対応スロットを検索してカウントを復元
+        foreach (var entry in data.letters)
+        {
+            foreach (var slot in letterSlots)
+            {
+                if (slot.letterData != null && slot.letterData.letterName == entry.letterName)
+                {
+                    slot.AddCount(entry.count);
+                    break;
+                }
+            }
+        }
     }
 }
+

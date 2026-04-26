@@ -40,6 +40,7 @@ public class CraftInfo : MonoBehaviour
     }
     public void ExecuteCraft()
     {
+        SoundManager.Instance?.PlaySE(SoundName.Click);
         if (currentCraftData == null) { Debug.LogError("CraftInfo:CraftData is null"); return; }
         if (letterInvManager == null) { Debug.LogError("CraftInfo:LetterInvManager is null"); return; }
 

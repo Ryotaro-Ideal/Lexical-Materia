@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8146844982244820680}
   - component: {fileID: 5892248315223525472}
   - component: {fileID: -1955433313397841365}
+  - component: {fileID: 8460972221890271905}
   m_Layer: 8
   m_Name: EnemyBase
   m_TagString: Untagged
@@ -83,7 +84,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 116
   m_CollisionDetection: 0
 --- !u!65 &8146844982244820680
 BoxCollider:
@@ -138,3 +139,16 @@ MonoBehaviour:
   invincibleTime: 1
   flashInterval: 0.1
   modelRoot: {fileID: 1471045084308842815}
+--- !u!114 &8460972221890271905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471045084308842815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4355d2f8b74d8e442aeb2c96c1968465, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  loseDistance: 20

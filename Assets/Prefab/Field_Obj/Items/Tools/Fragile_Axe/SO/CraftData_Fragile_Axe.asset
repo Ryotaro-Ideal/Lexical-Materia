@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0adce05d43b8b2e4bacab5bc90f2e277, type: 3}
+  m_Name: CraftData_Fragile_Axe
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 11400000, guid: 98d6b5b0b104f2247961447f8330a1ce, type: 2}
+  requiredLetters:
+  - letterData: {fileID: 11400000, guid: 9d89d28751f7dee49be3eb708482e47e, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 8b9b7f8519475664abbdd18338c3317f, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 90f0aef3f6e3a014eb3186723b819df6, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: c9f3e3f0d080c9644be1fac78755514b, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 62829d7d42df7bc45b96056e43fa0c7e, type: 2}
+    count: 1

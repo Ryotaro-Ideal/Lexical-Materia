@@ -11,6 +11,9 @@ public class InventorySlotManager : MonoBehaviour
     public SlotManager[] consumableSlots;
     public SlotManager[] inventorySlots;
 
+    [Header("セーブ復元用：ItemDatabaseアセットを登録する")]
+    [SerializeField] private ItemDatabase itemDatabase;
+
     [Header("開始時に所持させるアイテム")]
     public ItemData[] startItems;
 
@@ -301,4 +304,71 @@ public class InventorySlotManager : MonoBehaviour
         (toolSlots?.Length ?? 0) +
         (consumableSlots?.Length ?? 0) +
         (inventorySlots?.Length ?? 0);
+
+    // ===== セーブ・ロード =====
+
+    /// <summary>アイテムインベントリの現在状態をSaveDataに書き込む</summary>
+    public void WriteSaveData(SaveData data)
+    {
+        data.toolSlots        = EntriesToSave(toolEntries);
+        data.consumableSlots  = EntriesToSave(consumableEntries);
+        data.inventorySlots   = EntriesToSave(inventoryEntries);
+    }
+
+    private System.Collections.Generic.List<ItemSaveEntry> EntriesToSave(SlotEntry[] entries)
+    {
+        var list = new System.Collections.Generic.List<ItemSaveEntry>();
+        foreach (var e in entries)
+        {
+            list.Add(e.IsEmpty()
+                ? new ItemSaveEntry("", 0)
+                : new ItemSaveEntry(e.item.ID, e.count));
+        }
+        return list;
+    }
+
+    /// <summary>SaveDataからアイテムインベントリを復元する</summary>
+    public void ReadSaveData(SaveData data)
+    {
+        if (data == null) return;
+
+        RestoreEntries(toolEntries,        data.toolSlots);
+        RestoreEntries(consumableEntries,  data.consumableSlots);
+        RestoreEntries(inventoryEntries,   data.inventorySlots);
+
+        RefreshUI();
+    }
+
+    private void RestoreEntries(SlotEntry[] entries,
+        System.Collections.Generic.List<ItemSaveEntry> saved)
+    {
+        if (saved == null) return;
+        for (int i = 0; i < entries.Length && i < saved.Count; i++)
+        {
+            var s = saved[i];
+            if (s.IsEmpty()) { entries[i].Clear(); continue; }
+
+            ItemData found = FindItemById(s.itemId);
+            if (found != null)
+            {
+                entries[i].item  = found;
+                entries[i].count = s.count;
+            }
+            else
+            {
+                entries[i].Clear();
+                Debug.LogWarning($"[InventorySlotManager] ID '{s.itemId}' のItemDataが見つかりません。");
+            }
+        }
+    }
+
+    private ItemData FindItemById(string id)
+    {
+        if (itemDatabase == null)
+        {
+            Debug.LogWarning("[InventorySlotManager] ItemDatabaseが未設定です。Inspectorで登録してください。");
+            return null;
+        }
+        return itemDatabase.FindById(id);
+    }
 }

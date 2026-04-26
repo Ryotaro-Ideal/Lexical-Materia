@@ -55,6 +55,14 @@ public class LetterSlotManager : SlotBase
         countText.enabled = false;
     }
 
+
+    public void ResetCount()
+    {
+        count = 0;
+        countText.enabled = true;
+        countText.text = "0";
+    }
+
     protected override string GetDisplayName()
     {
         return letterData != null ? letterData.letterName : "";

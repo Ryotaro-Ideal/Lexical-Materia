@@ -33,7 +33,10 @@ public class DamagedState : IEnemyState
         timer += Time.deltaTime;
         if (timer >= damagedDuration)
         {
-            enemy.StateMachine.ChangeState(new MoveState(enemy));
+            if (enemy.CurrentTarget != null)
+                enemy.StateMachine.ChangeState(new ChaseState(enemy, enemy.CurrentTarget.transform));
+            else
+                enemy.StateMachine.ChangeState(new MoveState(enemy));
         }
     }
 

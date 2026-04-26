@@ -19,10 +19,17 @@ public class ChaseState : IEnemyState
     }
     public void Update()
     {
-        float speed = enemy.chaseSpeed;
+        // ターゲットを見失ったらMoveStateに戻る
+        if (enemy.HasLostTarget())
+        {
+            enemy.StateMachine.ChangeState(new MoveState(enemy));
+            return;
+        }
+
+        float speed = enemy.GetCurrentChaseSpeed();
+        Vector3 dir = (target.position - enemy.gameObject.transform.position).normalized;
+        enemy.gameObject.transform.rotation = Quaternion.LookRotation(dir);
         enemy.gameObject.transform.position = Vector3.MoveTowards(enemy.gameObject.transform.position, target.position, speed * Time.deltaTime);
-
-
     }
     public void Exit()
     {

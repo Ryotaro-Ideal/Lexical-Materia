@@ -84,43 +84,40 @@ public class SlotInputRouter : MonoBehaviour
         HandleQuickMove(hovered);
     }
 
-    // 実際の移動処理（InventorySlotManager の API を利用）
     private void HandleQuickMove(SlotManager hovered)
     {
-
-        if (MenuButtonManager.isBreakItemMenuOpen && hovered.slotType != SlotManager.SlotType.BreakItem) // 分解メニューが開いていて, インベントリ領域にいるなら
+        if (MenuButtonManager.isBreakItemMenuOpen && hovered.slotType != SlotManager.SlotType.BreakItem)
         {
             var breakItemManager = BreakItemSlotManager.Instance;
-
             bool ok = breakItemManager.MoveToBreakItemSlotFromInventory(hovered);
             if (!ok) Debug.Log("分解スロットへの移動に失敗しました（空きがない等）。");
+            else SoundManager.Instance?.PlaySE(SoundName.ItemMove);
             return;
         }
         else if (MenuButtonManager.isBreakItemMenuOpen && hovered.slotType == SlotManager.SlotType.BreakItem)
-        {//分解メニューを開いていて、分解スロットにいるなら
+        {
             var breakItemManager = BreakItemSlotManager.Instance;
             Debug.Log("分解メニューが開いているので通常インベントリへ戻します");
             bool ok = breakItemManager.MoveToInventoryFromBreakItemSlot(hovered.slotIndex);
             if (!ok) Debug.Log("インベントリへの移動に失敗しました（空きがない等）。");
+            else SoundManager.Instance?.PlaySE(SoundName.ItemMove);
             return;
         }
 
-        // ホットバー領域にいるなら通常インベントリへ戻す
         if (hovered.slotType == SlotManager.SlotType.Tool || hovered.slotType == SlotManager.SlotType.Consumable)
         {
             var invManager = InventorySlotManager.Instance;
             bool ok = invManager.MoveToInventoryFromSlot(hovered, hovered.slotIndex);
             if (!ok) Debug.Log("インベントリへの移動に失敗しました（空きがない等）。");
+            else SoundManager.Instance?.PlaySE(SoundName.ItemMove);
             return;
         }
         else
         {
-            // 通常インベントリにいるならホットバーへ移す
             var invManager = InventorySlotManager.Instance;
             bool moved = invManager.MoveToFirstHotbarSlot(hovered, hovered.slotIndex);
             if (!moved) Debug.Log("ホットバーへの移動に失敗しました（空きがない、区分不一致等）。");
+            else SoundManager.Instance?.PlaySE(SoundName.ItemMove);
         }
-
-
     }
 }

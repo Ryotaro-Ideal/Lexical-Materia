@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9254ef7013783345b57817ba9ab4ce6, type: 3}
+  m_Name: "ItemData_\u30AB\u30C3\u30D7"
+  m_EditorClassIdentifier: 
+  ID: 3006
+  itemName: "\u30AB\u30C3\u30D7"
+  visualPrefab: {fileID: 7913451997279522105, guid: b1e8a6ab97d2c9246a8ca9d1c398de1e, type: 3}
+  icon: {fileID: 0}
+  itemType: 2
+  description: "\u3053\u308C\u306F\u30AB\u30C3\u30D7"
+  maxStack: 99
+  destroyMaterials:
+  - letterData: {fileID: 11400000, guid: 79d3f758f7197f9408eba65267d72b00, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 8c79bb97c20285b44bba3d49bb322d4f, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 927ce04eabab34e40b9f7180c21fcc71, type: 2}
+    count: 1
+  baseAttackPower: 1

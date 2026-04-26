@@ -5,7 +5,6 @@ using UnityEditor;
 using TMPro;
 
 
-[ExecuteAlways]
 public class KanaGridLayouut : MonoBehaviour
 {
     [Header("セルレイアウト")]
@@ -34,17 +33,6 @@ public class KanaGridLayouut : MonoBehaviour
     public string characterChildName = "Character"; // 見つける子オブジェクト名（厳密一致）
 
     // エディタでの即時反映
-    private void OnValidate()
-    {
-        if (cellSize.x <= 0) cellSize.x = 1;
-        if (cellSize.y <= 0) cellSize.y = 1;
-        if (spacing.x < 0) spacing.x = 0;
-        if (spacing.y < 0) spacing.y = 0;
-        if (padding.x < 0) padding.x = 0;
-        if (padding.y < 0) padding.y = 0;
-
-        Rebuild();
-    }
 
     [ContextMenu("Rebuild Kana Grid (ColumnMajor)")]
     public void Rebuild()

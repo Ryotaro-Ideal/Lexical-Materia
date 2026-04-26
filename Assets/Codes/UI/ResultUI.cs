@@ -5,7 +5,7 @@ using TMPro;
 public class ResultUI : MonoBehaviour
 {
     [SerializeField] private GameObject resultPanel;
-    [SerializeField] private TextMeshProUGUI resultText;
+
     [SerializeField] private Button retryButton;
     [SerializeField] private Button titleButton;
 
@@ -15,16 +15,15 @@ public class ResultUI : MonoBehaviour
         resultPanel.SetActive(false);
 
         // ボタンのイベント登録
+        retryButton.onClick.AddListener(() => SoundManager.Instance?.PlaySE(SoundName.Click));
         retryButton.onClick.AddListener(() => GameManager.Instance.RestartGame());
+        titleButton.onClick.AddListener(() => SoundManager.Instance?.PlaySE(SoundName.Click));
         titleButton.onClick.AddListener(() => GameManager.Instance.BackToTitle());
     }
 
-    public void ShowResult(bool isVictory)
+    public void ShowResult()
     {
         resultPanel.SetActive(true);
-        resultText.text = isVictory ? "VICTORY" : "GAME OVER";
-        resultText.color = isVictory ? Color.yellow : Color.red;
-
         // カーソルを表示して操作可能にする
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;

@@ -15,6 +15,8 @@ public class AnimationController : MonoBehaviour
     private static readonly int JumpHash = Animator.StringToHash("Jump");
     private static readonly int PickupHash = Animator.StringToHash("Pickup");
     private static readonly int AttackHash = Animator.StringToHash("Attack_Punch");
+    private static readonly int DamagedHash = Animator.StringToHash("Damaged");
+    private static readonly int DeathHash = Animator.StringToHash("Death");
 
     private void Awake()
     {
@@ -47,5 +49,26 @@ public class AnimationController : MonoBehaviour
     public void TriggerPickup()
     {
         animator.SetTrigger(PickupHash);
+    }
+
+    public void TriggerDamaged()
+    {
+        animator.SetTrigger(DamagedHash);
+    }
+
+    public void TriggerDeath()
+    {
+        animator.SetTrigger(DeathHash);
+    }
+
+    /// <summary>
+    /// Time.timeScale=0中もアニメを再生し続けるか切り替える。
+    /// 死亡演出でtimeScaleを止めながらアニメだけ動かしたい時に使う。
+    /// </summary>
+    public void SetUnscaledTime(bool useUnscaled)
+    {
+        animator.updateMode = useUnscaled
+            ? AnimatorUpdateMode.UnscaledTime
+            : AnimatorUpdateMode.Normal;
     }
 }

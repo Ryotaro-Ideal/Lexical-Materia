@@ -9,16 +9,12 @@ public class Button_BreakItem : MonoBehaviour
     void Start()
     {
         breakItemSlotManager = BreakItemSlotManager.Instance;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         button.onClick.AddListener(OnButtonClicked);
     }
+
     private void OnButtonClicked()
     {
-        //ボタンを押したら、breakItemSlotManagerでアイテム削除と文字取得を行う
+        SoundManager.Instance?.PlaySE(SoundName.Click);
         breakItemSlotManager.ConvertItems();
     }
 

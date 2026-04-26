@@ -30,7 +30,7 @@ public class Attack_Punch : AttackBase
                         Debug.Log("Attack_Punch:" + equippedItem.itemName);
                     }
                     Debug.Log("Attack_Punch: Damaging " + damage);
-                    damageable.TakeDamage(damage);
+                    damageable.TakeDamage(damage, transform.position);
                 }
             }
         }

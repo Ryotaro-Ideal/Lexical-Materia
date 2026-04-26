@@ -9,6 +9,7 @@ public class SoundData
 public enum SoundName
 {
     MenuOpen,
-    MenuClose,
     ItemPickUp,
+    ItemMove,
+    Click,
 }

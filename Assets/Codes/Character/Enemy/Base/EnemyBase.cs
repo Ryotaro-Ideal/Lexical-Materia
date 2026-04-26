@@ -1,16 +1,24 @@
 using UnityEngine;
+using System;
 
 public abstract class EnemyBase : MonoBehaviour, IDamageable
 {
+    [Range(0, 20)]
     public int maxHp = 5;
     protected int currentHp;
+    [Range(0, 10)]
     public int collideDamage = 1;
-
+    [Range(0, 10)]
     public float moveSpeed;
+    [Range(0, 10)]
     public float chaseSpeed;
 
 
+    // 任意のKillTriggerが購読できる静的イベント
+    public static event Action<EnemyBase> OnAnyEnemyDied;
+
     public GameObject dropItem;
+    private float dropUpForce = 6f; // ドロップ時の上方向への力
     protected Rigidbody rb;
     protected EnemyStateMachine stateMachine; // 継承先でも使うのでprotectedのまま
 
@@ -20,6 +28,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
     public Animator animator;
     private ISenser[] sensers;
+    private ILoseSightSenser[] loseSensers;
     public GameObject CurrentTarget { get; private set; }
 
     protected virtual void Awake()
@@ -28,7 +37,9 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         currentHp = maxHp;
         InvincibleController = GetComponent<InvincibleController>(); // 取得漏れを防ぐ
         stateMachine = new EnemyStateMachine(this);
+        animator = GetComponent<Animator>();
         sensers = GetComponents<ISenser>();
+        loseSensers = GetComponents<ILoseSightSenser>();
 
         // 初期ステート
         stateMachine.ChangeState(new MoveState(this));
@@ -39,6 +50,19 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         stateMachine.Update();
     }
 
+
+    /// <summary>現在のChase速度を返す。Enemy固有の変化はoverrideで実装する。</summary>
+    public virtual float GetCurrentChaseSpeed() => chaseSpeed;
+
+    /// <summary>見失いセンサーがtrueを返した場合にターゲットを見失ったと判断する。</summary>
+    public bool HasLostTarget()
+    {
+        if (CurrentTarget == null) return true;
+        if (loseSensers == null || loseSensers.Length == 0) return false;
+        foreach (var senser in loseSensers)
+            if (senser.HasLostSight(CurrentTarget)) return true;
+        return false;
+    }
 
     public GameObject ScanTarget()
     {
@@ -61,7 +85,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         rb.MovePosition(rb.position + dir);
     }
 
-    public virtual void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage, Vector3 attackerPosition)
     {
         if (currentHp <= 0) return;
         currentHp -= damage;
@@ -71,7 +95,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
 
         if (currentHp <= 0)
         {
-            GameManager.Instance?.OnEnemyKilled();
             Die();
         }
     }
@@ -86,8 +109,22 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
         if (player != null && damageable != null)
         {
-            damageable.TakeDamage(collideDamage);
+            damageable.TakeDamage(collideDamage, transform.position);
         }
     }
-    protected abstract void Die();
+    protected virtual void Die()
+    {
+        OnAnyEnemyDied?.Invoke(this);
+        if (dropItem != null)
+        {
+            Vector3 spawnPos = transform.position + Vector3.up * 1.0f;
+            GameObject dropped = Instantiate(dropItem, spawnPos, Quaternion.identity);
+
+            if (dropped.TryGetComponent<Rigidbody>(out var rb))
+            {
+                rb.AddForce(Vector3.up * dropUpForce, ForceMode.Impulse);
+            }
+        }
+        Destroy(gameObject);
+    }
 }

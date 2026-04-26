@@ -36,6 +36,7 @@ public class EnemyStateMachine
     }
 
     public EnemyBase Enemy => enemy;
+    public IEnemyState CurrentState => currentState;
 }
 public interface IEnemyState
 {

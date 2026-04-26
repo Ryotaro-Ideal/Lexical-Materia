@@ -551,14 +551,14 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1471045084308842815, guid: 920f77fb8ff043f45b0f0b3d443a0d0e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6415162943119632376}
+      addedObject: {fileID: -7070021023691494261}
   m_SourcePrefab: {fileID: 100100000, guid: 920f77fb8ff043f45b0f0b3d443a0d0e, type: 3}
 --- !u!1 &377724958655002785 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1471045084308842815, guid: 920f77fb8ff043f45b0f0b3d443a0d0e, type: 3}
   m_PrefabInstance: {fileID: 1249680095207887262}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6415162943119632376
+--- !u!114 &-7070021023691494261
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -567,22 +567,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 377724958655002785}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 056055719b924e246a62b6eccaafd5cb, type: 3}
+  m_Script: {fileID: 11500000, guid: ed887b382631f1a49b6e231ca32ada95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHp: 5
+  maxHp: 4
   collideDamage: 1
   moveSpeed: 0
-  chaseSpeed: 3
-  dropItem: {fileID: 0}
-  animator: {fileID: 3358792499278597150}
+  chaseSpeed: 8
+  dropItem: {fileID: 4860377475471345660, guid: 7e3951a25c459f54190872a8176df52e, type: 3}
+  animator: {fileID: 0}
+  fastChaseTime: 0.7
+  coolTime: 1.5
+  minChaseSpeed: 1
 --- !u!4 &1356551152950800504 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 253522620794364390, guid: 920f77fb8ff043f45b0f0b3d443a0d0e, type: 3}
-  m_PrefabInstance: {fileID: 1249680095207887262}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &3358792499278597150 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 4596788286223113600, guid: 920f77fb8ff043f45b0f0b3d443a0d0e, type: 3}
   m_PrefabInstance: {fileID: 1249680095207887262}
   m_PrefabAsset: {fileID: 0}

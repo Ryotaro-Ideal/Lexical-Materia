@@ -33,8 +33,12 @@ public abstract class SlotBase : MonoBehaviour,
         {
             icon.enabled = true;
             countText.enabled = true;
-
         }
+
+        // 全スロット共通：クリック時にSEを鳴らす（Buttonがない場合は無視）
+        var btn = GetComponent<Button>();
+        if (btn != null)
+            btn.onClick.AddListener(() => SoundManager.Instance?.PlaySE(SoundName.Click));
     }
 
     // ---------- 抽象：派生で実装 ----------

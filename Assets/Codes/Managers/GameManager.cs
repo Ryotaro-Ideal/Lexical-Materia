@@ -11,15 +11,15 @@ public class GameManager : MonoBehaviour
 
     public enum GameState { Playing, Victory, GameOver }
     public GameState CurrentState { get; private set; }
-    public UnityEvent<string> OnVictory;
+    [SerializeField] private string BASE_AREA_SCENE_NAME = "BaseArea";
+    public UnityEvent OnVictory;
     public UnityEvent OnGameOver;
-    [SerializeField] private string nextSceneName = "";
 
-    [SerializeField] private List<EnemyBase> enemies = new List<EnemyBase>();
-    private int enemyCount;
+
 
     private void Awake()
     {
+        Time.timeScale = 1f;
         if (_instance != null && _instance != this)
         {
             Destroy(gameObject);
@@ -33,26 +33,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CurrentState = GameState.Playing;
-        RefreshEnemyCount();
-    }
-
-    public void RefreshEnemyCount()
-    {
-        enemies.Clear();
-        enemies.AddRange(FindObjectsByType<EnemyBase>(FindObjectsSortMode.None));
-        enemyCount = enemies.Count;
-        Debug.Log($"Total Enemies: {enemyCount}");
-    }
-
-    public void OnEnemyKilled()
-    {
-        enemyCount--;
-        Debug.Log($"Enemy Killed. Remaining: {enemyCount}");
-
-        if (enemyCount <= 0 && CurrentState == GameState.Playing)
-        {
-            WinGame();
-        }
     }
 
     public void OnPlayerDeath()
@@ -63,32 +43,31 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void WinGame()
+    public void WinGame()
     {
 
         CurrentState = GameState.Victory;
         Debug.Log("Game Clear!");
-        OnVictory?.Invoke(nextSceneName);
-        FindFirstObjectByType<ResultUI>()?.ShowResult(true);
-
+        OnVictory?.Invoke();
     }
 
     private void LoseGame()
     {
         CurrentState = GameState.GameOver;
-        Debug.Log("Game Over...");
+        FindFirstObjectByType<ResultUI>()?.ShowResult();
         OnGameOver?.Invoke();
-        FindFirstObjectByType<ResultUI>()?.ShowResult(false);
+
     }
 
     public void RestartGame()
     {
+        Time.timeScale = 1f; // 死亡演出で止めたtimeScaleをリセット
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void BackToTitle()
     {
-        // TODO: タイトルシーンができたらその名前を指定
-        // SceneManager.LoadScene("Title");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(BASE_AREA_SCENE_NAME);
     }
 }

@@ -27,6 +27,17 @@ public class InvincibleController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 無敵状態を強制終了し、レンダラーを確実に表示状態に戻す。
+    /// 死亡時にTime.timeScale=0にする前に呼ぶこと。
+    /// </summary>
+    public void StopInvincibility()
+    {
+        StopAllCoroutines();
+        isInvincible = false;
+        ToggleRenderers(true); // 確実に表示状態に戻す
+    }
+
     private IEnumerator Invincible()
     {
         isInvincible = true;

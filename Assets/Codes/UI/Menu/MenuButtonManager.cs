@@ -67,25 +67,27 @@ public class MenuButtonManager : MonoBehaviour
 
     private void OnCraftButtonClicked()
     {
+        SoundManager.Instance?.PlaySE(SoundName.Click);
         SwitchMenu(craftMenu);
         SwitchItemSlots(true);
     }
     private void OnPlayerInfoButtonClicked()
     {
+        SoundManager.Instance?.PlaySE(SoundName.Click);
         SwitchMenu(PlayerInfoMenu);
         SwitchItemSlots(true);
     }
     private void OnLetterInvButtonClicked()
     {
+        SoundManager.Instance?.PlaySE(SoundName.Click);
         SwitchMenu(letterInvMenu);
         SwitchItemSlots(false);
-
     }
     private void OnBreakItemButtonClicked()
     {
+        SoundManager.Instance?.PlaySE(SoundName.Click);
         SwitchMenu(breakItemMenu);
         SwitchItemSlots(true);
-
     }
     private void SwitchMenu(CanvasGroup menuToActivate)
     {

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9254ef7013783345b57817ba9ab4ce6, type: 3}
+  m_Name: ItemData_Cloth
+  m_EditorClassIdentifier: 
+  ID: 3004
+  itemName: "\u5E03"
+  visualPrefab: {fileID: 1469501219946348, guid: 410c3ff33781dcb4bbf95047b5fc4a50, type: 3}
+  icon: {fileID: 21300000, guid: 766e887d7147d964ea2f12837511442a, type: 3}
+  itemType: 2
+  description: "\u3053\u308C\u306F\u5E03"
+  maxStack: 99
+  destroyMaterials:
+  - letterData: {fileID: 11400000, guid: c25e00761ba5fcd4c8b98ae2a4fbc341, type: 2}
+    count: 1
+  - letterData: {fileID: 11400000, guid: 62829d7d42df7bc45b96056e43fa0c7e, type: 2}
+    count: 1
+  baseAttackPower: 0

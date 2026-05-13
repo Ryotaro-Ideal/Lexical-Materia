@@ -15,7 +15,7 @@ MonoBehaviour:
   ID: 3006
   itemName: "\u30AB\u30C3\u30D7"
   visualPrefab: {fileID: 7913451997279522105, guid: b1e8a6ab97d2c9246a8ca9d1c398de1e, type: 3}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: f0da04262407ef243b06da976ecabef5, type: 3}
   itemType: 2
   description: "\u3053\u308C\u306F\u30AB\u30C3\u30D7"
   maxStack: 99

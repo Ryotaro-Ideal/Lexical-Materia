@@ -37,7 +37,6 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         currentHp = maxHp;
         InvincibleController = GetComponent<InvincibleController>(); // 取得漏れを防ぐ
         stateMachine = new EnemyStateMachine(this);
-        animator = GetComponent<Animator>();
         sensers = GetComponents<ISenser>();
         loseSensers = GetComponents<ILoseSightSenser>();
 
@@ -50,11 +49,18 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         stateMachine.Update();
     }
 
+    public virtual IEnemyState CreateChaseState(Transform target)
+    {
+        return new ChaseState(this, target, chaseSpeed);
+    }
 
-    /// <summary>現在のChase速度を返す。Enemy固有の変化はoverrideで実装する。</summary>
+    public virtual IEnemyState CreateMoveState()
+    {
+        return new MoveState(this);
+    }
+
     public virtual float GetCurrentChaseSpeed() => chaseSpeed;
 
-    /// <summary>見失いセンサーがtrueを返した場合にターゲットを見失ったと判断する。</summary>
     public bool HasLostTarget()
     {
         if (CurrentTarget == null) return true;
@@ -85,13 +91,13 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         rb.MovePosition(rb.position + dir);
     }
 
-    public virtual void TakeDamage(int damage, Vector3 attackerPosition)
+    public virtual void TakeDamage(int damage, Transform attacker)
     {
         if (currentHp <= 0) return;
         currentHp -= damage;
 
         // ダメージステートへの遷移（ここで強制的に上書き）
-        stateMachine.ChangeState(new DamagedState(this));
+        stateMachine.ChangeState(new DamagedState(this, attacker));
 
         if (currentHp <= 0)
         {
@@ -109,7 +115,7 @@ public abstract class EnemyBase : MonoBehaviour, IDamageable
         IDamageable damageable = collision.gameObject.GetComponent<IDamageable>();
         if (player != null && damageable != null)
         {
-            damageable.TakeDamage(collideDamage, transform.position);
+            damageable.TakeDamage(collideDamage, transform);
         }
     }
     protected virtual void Die()

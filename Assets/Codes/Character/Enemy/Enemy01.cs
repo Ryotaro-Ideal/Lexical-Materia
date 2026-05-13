@@ -10,6 +10,6 @@ public class Enemy01 : EnemyBase
 
     protected override void Die()
     {
-        base.Die(); // EnemyBase.Die() でドロップ生成 → Destroy まで行う
+        base.Die();
     }
 }

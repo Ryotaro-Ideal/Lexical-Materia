@@ -9,6 +9,7 @@ public class SaveData
 
     public List<ItemSaveEntry> toolSlots = new List<ItemSaveEntry>();
     public List<ItemSaveEntry> consumableSlots = new List<ItemSaveEntry>();
+    public List<ItemSaveEntry> freeSlots = new List<ItemSaveEntry>();
     public List<ItemSaveEntry> inventorySlots = new List<ItemSaveEntry>();
 }
 

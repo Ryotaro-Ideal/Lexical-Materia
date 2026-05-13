@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2187422073710482381}
-  - {fileID: 2373323306884836390}
+  - {fileID: 6071459148042668167}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3178584290056169928
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c743ae8f6cd05d14abf8a2e68f560e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tooltipUI: {fileID: 1463188362607951005}
+  tooltipUI: {fileID: 4123766072462301495}
   interactLayer:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -55,7 +55,7 @@ MonoBehaviour:
   coneHalfAngle: 60
   distanceHysteresis: 0.25
   hoverShowDistanceMultiplier: 1
---- !u!1001 &4973899471140333638
+--- !u!1001 &3579038042800065767
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -152,10 +152,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 519cb7875069e3945a8608acc258b471, type: 3}
---- !u!224 &2373323306884836390 stripped
+--- !u!224 &6071459148042668167 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7343519201821459552, guid: 519cb7875069e3945a8608acc258b471, type: 3}
-  m_PrefabInstance: {fileID: 4973899471140333638}
+  m_PrefabInstance: {fileID: 3579038042800065767}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5579169063430659521
 PrefabInstance:
@@ -254,19 +254,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c34d48134459f64ea60d3cb9777a304, type: 3}
---- !u!114 &1463188362607951005 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6423112339814965596, guid: 2c34d48134459f64ea60d3cb9777a304, type: 3}
-  m_PrefabInstance: {fileID: 5579169063430659521}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecc9ded6245e6a042a2196684f4242c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &2187422073710482381 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5996112433414835724, guid: 2c34d48134459f64ea60d3cb9777a304, type: 3}
   m_PrefabInstance: {fileID: 5579169063430659521}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4123766072462301495 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8383380135647003894, guid: 2c34d48134459f64ea60d3cb9777a304, type: 3}
+  m_PrefabInstance: {fileID: 5579169063430659521}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea103af2299192146ac0ad3856ac535e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

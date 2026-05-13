@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class PickupItemManager : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private TooltipUI tooltipUI;      // インスペクターで直接指定（2つあってもこれで確実）
+    [SerializeField] private ItemTipUI tooltipUI;
     private Transform playerTransform;                // プレイヤーは自動検索
 
     [Header("Layer Settings")]

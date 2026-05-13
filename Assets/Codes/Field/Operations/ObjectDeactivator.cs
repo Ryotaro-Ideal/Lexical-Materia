@@ -3,15 +3,18 @@ using UnityEngine;
 
 public class ObjectDeactivator : MonoBehaviour
 {
-    [SerializeField] private GameObject targetObject;
+    [SerializeField] private GameObject[] targetObject;
 
 
     public void Deactivate()
     {
         if (targetObject != null)
         {
-            targetObject.SetActive(false);
-            Debug.Log($"{targetObject.name} を非アクティブにしました。");
+            foreach (var t in targetObject)
+            {
+                t.SetActive(false);
+            }
+            Debug.Log($"{targetObject[0].name} を非アクティブにしました。");
         }
         else
         {

@@ -26,6 +26,9 @@ public class ItemCreatorTool : EditorWindow
 
     private Vector2 scrollPos;
 
+    private string destroyMaterialInput = "";
+    private Dictionary<string, LetterData> letterDataCache = new Dictionary<string, LetterData>();
+
     [MenuItem("Tools/Inventory/Item Creator Tool")]
     public static void ShowWindow()
     {
@@ -35,6 +38,20 @@ public class ItemCreatorTool : EditorWindow
     private void OnEnable()
     {
         itemBasePrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefab/Field_Obj/Items/ItemBase.prefab");
+        CacheLetterData();
+    }
+
+    private void CacheLetterData()
+    {
+        letterDataCache.Clear();
+        string[] guids = AssetDatabase.FindAssets("t:LetterData");
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            LetterData ld = AssetDatabase.LoadAssetAtPath<LetterData>(path);
+            if (ld != null && !string.IsNullOrEmpty(ld.letterName))
+                letterDataCache[ld.letterName] = ld;
+        }
     }
 
     private void OnGUI()
@@ -77,6 +94,15 @@ public class ItemCreatorTool : EditorWindow
         EditorGUILayout.Space(6);
         EditorGUILayout.LabelField("Destroy Materials (分解素材)", EditorStyles.boldLabel);
 
+        EditorGUILayout.BeginHorizontal();
+        destroyMaterialInput = EditorGUILayout.TextField("文字入力", destroyMaterialInput);
+        GUI.enabled = !string.IsNullOrEmpty(destroyMaterialInput) && letterDataCache.Count > 0;
+        if (GUILayout.Button("変換", GUILayout.Width(48)))
+            ApplyDestroyMaterialInput();
+        GUI.enabled = true;
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.HelpBox("入力欄に文字を入れて「変換」。LetterDataにない文字（漢字等）は無視。同じ文字がすでにある場合は count++。", MessageType.None);
+
         for (int i = 0; i < destroyMaterials.Count; i++)
         {
             EditorGUILayout.BeginHorizontal();
@@ -111,6 +137,22 @@ public class ItemCreatorTool : EditorWindow
         GUI.enabled = true;
 
         EditorGUILayout.EndScrollView();
+    }
+
+    private void ApplyDestroyMaterialInput()
+    {
+        foreach (char c in destroyMaterialInput)
+        {
+            string key = c.ToString();
+            if (!letterDataCache.TryGetValue(key, out LetterData ld)) continue;
+
+            DestroyMaterial existing = destroyMaterials.Find(m => m.letterData == ld);
+            if (existing != null)
+                existing.count++;
+            else
+                destroyMaterials.Add(new DestroyMaterial { letterData = ld, count = 1 });
+        }
+        destroyMaterialInput = "";
     }
 
     private void CreateItem()

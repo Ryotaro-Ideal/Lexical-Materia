@@ -54,7 +54,7 @@ public class MoveController : MonoBehaviour
             return;
         }
         // メニューが開いている場合は移動処理をしない（UI操作中はプレイヤーを停止させる）
-        if (input != null && input.IsMenuOpened)
+        if (input != null && (input.IsMenuOpened || input.IsGimmickUIOpened))
         {
             // ジャンプや移動入力は無視し、速度を滑らかにゼロにする（急停止を避ける場合はさらに工夫）
             velocity.x = 0f;
@@ -67,7 +67,7 @@ public class MoveController : MonoBehaviour
             velocity.y = -2f;
 
         Vector3 forward = new Vector3(cam.forward.x, 0f, cam.forward.z).normalized;
-        Vector3 right   = new Vector3(cam.right.x,   0f, cam.right.z).normalized;
+        Vector3 right = new Vector3(cam.right.x, 0f, cam.right.z).normalized;
         Vector3 moveDir = forward * input.MoveInput.y + right * input.MoveInput.x;
 
         float speed = input.DashHeld ? dashSpeed : moveSpeed;

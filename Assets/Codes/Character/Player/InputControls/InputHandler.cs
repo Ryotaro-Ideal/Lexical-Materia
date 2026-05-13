@@ -21,6 +21,10 @@ public class InputHandler : MonoBehaviour
     public event Action OnMenuOpened;
     public event Action OnMenuClosed;
 
+    // ギミックUI用の状態と、閉じるリクエストのイベント
+    public bool IsGimmickUIOpened { get; set; }
+    public event Action OnGimmickUICloseRequested;
+
     // ゲームプレイのインタラクト（拾う等）用フラグ
     private bool interactTriggered = false;
 
@@ -60,6 +64,12 @@ public class InputHandler : MonoBehaviour
         // Player マップ側に Menu Open ボタンがある場合（押下でトグル）
         controls.Player.OpenMenu.performed += ctx =>
         {
+            // 文字操作UIなどのギミックが開いている場合は、メニューは開かずにギミックを閉じる
+            if (IsGimmickUIOpened)
+            {
+                OnGimmickUICloseRequested?.Invoke();
+                return;
+            }
             IsMenuOpened = !IsMenuOpened;
         };
 

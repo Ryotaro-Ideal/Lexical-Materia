@@ -77,7 +77,6 @@ public class SlotInputRouter : MonoBehaviour
         {
             Debug.Log("SlotInputRouter_PlayerInput: ホバー中のスロットがありません。");
             return;
-
         }
 
         lastTriggerTime = Time.realtimeSinceStartup;
@@ -104,7 +103,9 @@ public class SlotInputRouter : MonoBehaviour
             return;
         }
 
-        if (hovered.slotType == SlotManager.SlotType.Tool || hovered.slotType == SlotManager.SlotType.Consumable)
+        if (hovered.slotType == SlotManager.SlotType.Tool
+            || hovered.slotType == SlotManager.SlotType.Consumable
+            || hovered.slotType == SlotManager.SlotType.Free)
         {
             var invManager = InventorySlotManager.Instance;
             bool ok = invManager.MoveToInventoryFromSlot(hovered, hovered.slotIndex);
@@ -115,7 +116,7 @@ public class SlotInputRouter : MonoBehaviour
         else
         {
             var invManager = InventorySlotManager.Instance;
-            bool moved = invManager.MoveToFirstHotbarSlot(hovered, hovered.slotIndex);
+            bool moved = invManager.MoveToHotbar(hovered, hovered.slotIndex);
             if (!moved) Debug.Log("ホットバーへの移動に失敗しました（空きがない、区分不一致等）。");
             else SoundManager.Instance?.PlaySE(SoundName.ItemMove);
         }

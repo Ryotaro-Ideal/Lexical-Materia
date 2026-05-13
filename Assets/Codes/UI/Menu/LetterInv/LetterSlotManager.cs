@@ -10,6 +10,9 @@ public class LetterSlotManager : SlotBase
     public LetterData letterData;
     public TMP_Text iconText;
     public Color activeColor;
+    public bool isGimmickMode = false;
+
+    public event System.Action<LetterSlotManager> OnGimmickClicked;
 
     public int Count { get { return count; } }
 
@@ -22,7 +25,7 @@ public class LetterSlotManager : SlotBase
 
     }
 
-    // ---------------- データ操作 ----------------
+
 
     public void AddCount(int c)
     {
@@ -73,27 +76,27 @@ public class LetterSlotManager : SlotBase
         return icon != null ? icon.sprite : null;
     }
 
-    // ---------------- SlotBase 抽象実装 ----------------
+
 
     protected override bool HasItem()
     {
         return letterData != null && count > 0;
     }
 
-
-
     protected override void OnDropSlot(SlotBase other)
     {
-        // 今回は LetterSlot 同士の処理は未実装
-        // 必要になったらここに書く
+        if (isGimmickMode) return;
     }
-
-    // ---------------- Click ----------------
 
     private void OnSlotClicked()
     {
-        if (!HasItem())
+        if (!HasItem()) return;
+
+        if (isGimmickMode)
+        {
+            OnGimmickClicked?.Invoke(this);
             return;
+        }
 
         Debug.Log($"LetterSlot {slotIndex}: {letterData.letterName} x{count}");
     }

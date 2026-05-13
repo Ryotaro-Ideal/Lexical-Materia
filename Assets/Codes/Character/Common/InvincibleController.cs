@@ -13,34 +13,44 @@ public class InvincibleController : MonoBehaviour
 
     private Renderer[] renderers;
 
+    private Coroutine invincibleRoutine;
+    private Coroutine flashRoutine;
+
     private void Awake()
     {
-        GameObject root = modelRoot != null ? modelRoot : gameObject;
-        renderers = root.GetComponentsInChildren<Renderer>();
+        if (modelRoot != null)
+        {
+            renderers = modelRoot.GetComponentsInChildren<Renderer>();
+        }
+
     }
 
     public void StartInvincibility()
     {
-        if (!isInvincible)
-        {
-            StartCoroutine(Invincible());
-        }
-    }
+        if (invincibleRoutine != null) StopCoroutine(invincibleRoutine);
+        invincibleRoutine = StartCoroutine(Invincible());
 
-    /// <summary>
-    /// 無敵状態を強制終了し、レンダラーを確実に表示状態に戻す。
-    /// 死亡時にTime.timeScale=0にする前に呼ぶこと。
-    /// </summary>
-    public void StopInvincibility()
-    {
-        StopAllCoroutines();
-        isInvincible = false;
-        ToggleRenderers(true); // 確実に表示状態に戻す
+        if (modelRoot != null)
+        {
+            if (flashRoutine != null)
+            {
+                StopCoroutine(flashRoutine);
+                ToggleRenderers(true);
+            }
+            flashRoutine = StartCoroutine(FlashCoroutine());
+        }
     }
 
     private IEnumerator Invincible()
     {
         isInvincible = true;
+        yield return new WaitForSeconds(invincibleTime);
+        isInvincible = false;
+        invincibleRoutine = null;
+    }
+
+    private IEnumerator FlashCoroutine()
+    {
         float time = 0f;
 
         while (time < invincibleTime)
@@ -52,10 +62,8 @@ public class InvincibleController : MonoBehaviour
 
             time += flashInterval * 2;
         }
-
-        // 最後に確実に表示状態に戻す
-        isInvincible = false;
         ToggleRenderers(true);
+        flashRoutine = null;
     }
 
     private void ToggleRenderers(bool isVisible)

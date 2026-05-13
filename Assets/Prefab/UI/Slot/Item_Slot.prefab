@@ -57,7 +57,6 @@ MonoBehaviour:
   countText: {fileID: 6447001879967368096}
   slotColor: {r: 1, g: 1, b: 1, a: 0}
   UIMaskSprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
-  toolTipUI: {fileID: 0}
   toolTipOffset: {x: 0, y: 0}
   slotType: 0
 --- !u!114 &8489521263929262502
@@ -80,8 +79,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -252469504, guid: 8013bc878a84c5e48b0f2df7f4038614, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

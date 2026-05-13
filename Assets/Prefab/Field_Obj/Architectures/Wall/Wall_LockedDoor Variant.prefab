@@ -71,7 +71,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7179563302638716420, guid: a2975a66656dea84588ccc5cce85a536, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 256708231409273011}
+      addedObject: {fileID: 1103808650250003853}
   m_SourcePrefab: {fileID: 100100000, guid: a2975a66656dea84588ccc5cce85a536, type: 3}
 --- !u!65 &6865416565771102328 stripped
 BoxCollider:
@@ -88,7 +88,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7179563302638716420, guid: a2975a66656dea84588ccc5cce85a536, type: 3}
   m_PrefabInstance: {fileID: 977301299032136615}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &256708231409273011
+--- !u!114 &1103808650250003853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,11 +97,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7940686799542721955}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8b0506ac5ba5c174e9247784c519634c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9c28048562e26e242a6e887d564379dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUnlocked: 0
   interactionName: "\u958B\u3051\u308B"
   pivot: {fileID: 7189273712694509750}
   doorCollider: {fileID: 6865416565771102328}
   openAngle: 90
   duration: 0.5
+  requiredKey: {fileID: 0}
+  OnFail:
+    m_PersistentCalls:
+      m_Calls: []

@@ -7,7 +7,6 @@ public class LockedDoor : Door
     [Header("鍵設定")]
     [SerializeField] private ItemData requiredKey;
     private string lockedDisplayName = "";
-    private bool isUnlocked = false;
 
     [Header("失敗時")]
     public UnityEvent OnFail;

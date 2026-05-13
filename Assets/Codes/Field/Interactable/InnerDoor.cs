@@ -7,7 +7,6 @@ public class InnerDoor : Door
     [Tooltip("ドアの正面方向を「内側」として扱う。チェックを外すと逆方向が内側になる。")]
     [SerializeField] private bool forwardIsInside = true;
 
-    private bool isUnlocked = false;
 
     private bool IsPlayerInside()
     {

@@ -64,6 +64,14 @@ PrefabInstance:
       propertyPath: itemData
       value: 
       objectReference: {fileID: 11400000, guid: 9e987bd786e56be4986a98c81ed2447d, type: 2}
+    - target: {fileID: 4602142714472845938, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4602142714472845938, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
+      propertyPath: m_Constraints
+      value: 126
+      objectReference: {fileID: 0}
     - target: {fileID: 6241357420938486822, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_Mesh
       value: 

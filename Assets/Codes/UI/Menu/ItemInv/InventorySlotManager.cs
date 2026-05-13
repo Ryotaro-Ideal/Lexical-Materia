@@ -9,6 +9,7 @@ public class InventorySlotManager : MonoBehaviour
     [Header("Inspector に Scene 上の SlotManager を割当てる")]
     public SlotManager[] toolSlots;
     public SlotManager[] consumableSlots;
+    public SlotManager[] freeSlots;
     public SlotManager[] inventorySlots;
 
     [Header("セーブ復元用：ItemDatabaseアセットを登録する")]
@@ -17,9 +18,9 @@ public class InventorySlotManager : MonoBehaviour
     [Header("開始時に所持させるアイテム")]
     public ItemData[] startItems;
 
-    // 内部データ
     public SlotEntry[] toolEntries;
     public SlotEntry[] consumableEntries;
+    public SlotEntry[] freeEntries;
     public SlotEntry[] inventoryEntries;
 
     public event Action OnInventoryChanged;
@@ -35,11 +36,19 @@ public class InventorySlotManager : MonoBehaviour
 
         toolEntries = new SlotEntry[toolSlots != null ? toolSlots.Length : 0];
         consumableEntries = new SlotEntry[consumableSlots != null ? consumableSlots.Length : 0];
+        freeEntries = new SlotEntry[freeSlots != null ? freeSlots.Length : 0];
         inventoryEntries = new SlotEntry[inventorySlots != null ? inventorySlots.Length : 0];
 
         InitializeEntries(toolEntries);
         InitializeEntries(consumableEntries);
+        InitializeEntries(freeEntries);
         InitializeEntries(inventoryEntries);
+
+        // スロットUI側の設定を強制的に上書き
+        SetupSlots(toolSlots, SlotManager.SlotType.Tool);
+        SetupSlots(consumableSlots, SlotManager.SlotType.Consumable);
+        SetupSlots(freeSlots, SlotManager.SlotType.Free);
+        SetupSlots(inventorySlots, SlotManager.SlotType.Inventory);
 
         // 開始アイテムの配布
         if (startItems != null)
@@ -51,6 +60,17 @@ public class InventorySlotManager : MonoBehaviour
         }
 
         RefreshUI();
+    }
+
+    private void SetupSlots(SlotManager[] slots, SlotManager.SlotType type)
+    {
+        if (slots == null) return;
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == null) continue;
+            slots[i].slotType = type;
+            slots[i].SetSlotIndex(i);
+        }
     }
 
     private void InitializeEntries(SlotEntry[] arr)
@@ -72,6 +92,9 @@ public class InventorySlotManager : MonoBehaviour
 
             case SlotManager.SlotType.Consumable:
                 return IsValidIndex(idx, consumableEntries) ? consumableEntries[idx] : null;
+
+            case SlotManager.SlotType.Free:
+                return IsValidIndex(idx, freeEntries) ? freeEntries[idx] : null;
 
             case SlotManager.SlotType.Inventory:
                 return IsValidIndex(idx, inventoryEntries) ? inventoryEntries[idx] : null;
@@ -98,6 +121,9 @@ public class InventorySlotManager : MonoBehaviour
 
             case SlotManager.SlotType.Consumable:
                 return item.itemType == ItemType.Consumable;
+
+            case SlotManager.SlotType.Free:
+                return true;
 
             case SlotManager.SlotType.Inventory:
                 return true;
@@ -157,6 +183,7 @@ public class InventorySlotManager : MonoBehaviour
 
         TryMerge(toolEntries);
         TryMerge(consumableEntries);
+        TryMerge(freeEntries);
         TryMerge(inventoryEntries);
 
         void TryPlace(SlotEntry[] arr)
@@ -177,6 +204,7 @@ public class InventorySlotManager : MonoBehaviour
         if (item.itemType == ItemType.Tool) TryPlace(toolEntries);
         if (item.itemType == ItemType.Consumable) TryPlace(consumableEntries);
 
+        TryPlace(freeEntries);
         TryPlace(inventoryEntries);
         RefreshUI();
         if (remaining <= 0)
@@ -212,7 +240,7 @@ public class InventorySlotManager : MonoBehaviour
                 }
             }
         }
-
+        TryTake(freeEntries);
         TryTake(toolEntries);
         TryTake(consumableEntries);
         TryTake(inventoryEntries);
@@ -241,35 +269,35 @@ public class InventorySlotManager : MonoBehaviour
             }
         }
 
-        entry.Clear();
-        RefreshUI();
-        return true;
+        return false;
     }
 
-    /// <summary>
-    /// 指定スロットの中身を最初に空いているホットバー（Tool）へ移動
-    /// </summary>
-    public bool MoveToFirstHotbarSlot(SlotManager from, int idx)
+    public bool MoveToHotbar(SlotManager from, int idx)
     {
         if (from == null) return false;
 
         var entry = GetEntry(from, idx);
         if (entry == null || entry.IsEmpty()) return false;
 
-        if (toolEntries == null) return false;
+        ItemType type = entry.item.itemType;
 
-        foreach (var target in toolEntries)
+        if (type == ItemType.Tool && TryMoveEntryTo(entry, toolEntries)) return true;
+        if (type == ItemType.Consumable && TryMoveEntryTo(entry, consumableEntries)) return true;
+
+        return TryMoveEntryTo(entry, freeEntries);
+    }
+
+    private bool TryMoveEntryTo(SlotEntry entry, SlotEntry[] targets)
+    {
+        foreach (var t in targets)
         {
-            if (target.IsEmpty())
-            {
-                target.item = entry.item;
-                target.count = entry.count;
-                entry.Clear();
-                RefreshUI();
-                return true;
-            }
+            if (!t.IsEmpty()) continue;
+            t.item = entry.item;
+            t.count = entry.count;
+            entry.Clear();
+            RefreshUI();
+            return true;
         }
-
         return false;
     }
 
@@ -280,6 +308,7 @@ public class InventorySlotManager : MonoBehaviour
     {
         UpdateSlots(toolSlots, toolEntries);
         UpdateSlots(consumableSlots, consumableEntries);
+        UpdateSlots(freeSlots, freeEntries);
         UpdateSlots(inventorySlots, inventoryEntries);
 
         OnInventoryChanged?.Invoke();
@@ -303,6 +332,7 @@ public class InventorySlotManager : MonoBehaviour
     public int InstanceSlotsCount =>
         (toolSlots?.Length ?? 0) +
         (consumableSlots?.Length ?? 0) +
+        (freeSlots?.Length ?? 0) +
         (inventorySlots?.Length ?? 0);
 
     // ===== セーブ・ロード =====
@@ -310,9 +340,10 @@ public class InventorySlotManager : MonoBehaviour
     /// <summary>アイテムインベントリの現在状態をSaveDataに書き込む</summary>
     public void WriteSaveData(SaveData data)
     {
-        data.toolSlots        = EntriesToSave(toolEntries);
-        data.consumableSlots  = EntriesToSave(consumableEntries);
-        data.inventorySlots   = EntriesToSave(inventoryEntries);
+        data.toolSlots = EntriesToSave(toolEntries);
+        data.consumableSlots = EntriesToSave(consumableEntries);
+        data.freeSlots = EntriesToSave(freeEntries);
+        data.inventorySlots = EntriesToSave(inventoryEntries);
     }
 
     private System.Collections.Generic.List<ItemSaveEntry> EntriesToSave(SlotEntry[] entries)
@@ -332,9 +363,10 @@ public class InventorySlotManager : MonoBehaviour
     {
         if (data == null) return;
 
-        RestoreEntries(toolEntries,        data.toolSlots);
-        RestoreEntries(consumableEntries,  data.consumableSlots);
-        RestoreEntries(inventoryEntries,   data.inventorySlots);
+        RestoreEntries(toolEntries, data.toolSlots);
+        RestoreEntries(consumableEntries, data.consumableSlots);
+        RestoreEntries(freeEntries, data.freeSlots);
+        RestoreEntries(inventoryEntries, data.inventorySlots);
 
         RefreshUI();
     }
@@ -351,7 +383,7 @@ public class InventorySlotManager : MonoBehaviour
             ItemData found = FindItemById(s.itemId);
             if (found != null)
             {
-                entries[i].item  = found;
+                entries[i].item = found;
                 entries[i].count = s.count;
             }
             else
@@ -370,5 +402,14 @@ public class InventorySlotManager : MonoBehaviour
             return null;
         }
         return itemDatabase.FindById(id);
+    }
+
+    public void ResetSaveData()
+    {
+        foreach (var e in toolEntries) e.Clear();
+        foreach (var e in consumableEntries) e.Clear();
+        foreach (var e in freeEntries) e.Clear();
+        foreach (var e in inventoryEntries) e.Clear();
+        RefreshUI();
     }
 }

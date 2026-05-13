@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public abstract class SlotBase : MonoBehaviour,
     IBeginDragHandler, IDragHandler, IEndDragHandler, IDropHandler
 {
-    public int slotIndex { get; set; }
+    public int slotIndex { get; private set; }
     [Header("UI")]
     public Image icon;
     public TMP_Text countText;
@@ -14,7 +14,7 @@ public abstract class SlotBase : MonoBehaviour,
     public Sprite UIMaskSprite;
 
     [Header("Tooltip")]
-    public TooltipUI toolTipUI;
+    protected SlotTipUI toolTipUI;
     public Vector2 toolTipOffset = new Vector2(12f, -18f);
 
     protected Canvas rootCanvas;
@@ -24,7 +24,7 @@ public abstract class SlotBase : MonoBehaviour,
 
     protected virtual void Awake()
     {
-        slotIndex = transform.GetSiblingIndex();
+        toolTipUI = FindFirstObjectByType<SlotTipUI>();
         rootCanvas = GetComponentInParent<Canvas>();
         slotImage = GetComponent<Image>();
         slotImage.color = slotColor;
@@ -40,6 +40,8 @@ public abstract class SlotBase : MonoBehaviour,
         if (btn != null)
             btn.onClick.AddListener(() => SoundManager.Instance?.PlaySE(SoundName.Click));
     }
+
+    public void SetSlotIndex(int index) => slotIndex = index;
 
     // ---------- 抽象：派生で実装 ----------
 

@@ -6,10 +6,12 @@ public class DamagedState : IEnemyState
     private EnemyBase enemy;
     private float timer;
     private float damagedDuration = 1.0f;
+    private Transform attacker;
 
-    public DamagedState(EnemyBase enemy)
+    public DamagedState(EnemyBase enemy, Transform attacker)
     {
         this.enemy = enemy;
+        this.attacker = attacker;
     }
 
     public void Enter()
@@ -33,10 +35,7 @@ public class DamagedState : IEnemyState
         timer += Time.deltaTime;
         if (timer >= damagedDuration)
         {
-            if (enemy.CurrentTarget != null)
-                enemy.StateMachine.ChangeState(new ChaseState(enemy, enemy.CurrentTarget.transform));
-            else
-                enemy.StateMachine.ChangeState(new MoveState(enemy));
+            enemy.StateMachine.ChangeState(enemy.CreateChaseState(attacker));
         }
     }
 

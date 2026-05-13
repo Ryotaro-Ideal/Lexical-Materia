@@ -1,41 +1,33 @@
 using UnityEngine;
-using System;
 
-/// <summary>
-/// ホットバーの表示管理。インベントリのデータソースを参照して表示を更新する。
-/// - ホットバーは表示オンリー（ドラッグで移動は不可）
-/// - クリックで EquipController に装備要求を送る
-/// </summary>
 public class HotbarManager : MonoBehaviour
 {
     [Header("参照")]
-    public InventorySlotManager inventoryManager; // シーンの InventorySlotManager
-    public SlotManager[] hotbarSlots;             // ホットバー上の SlotManager UI (表示用)
+    public InventorySlotManager inventoryManager;
+
+    [Header("外部ホットバー表示スロット（メニュー外のUI）")]
+    public SlotManager[] toolHotbarSlots;
+    public SlotManager[] consumableHotbarSlots;
+    public SlotManager[] freeHotbarSlots;
 
     private void Awake()
     {
         if (inventoryManager == null) inventoryManager = InventorySlotManager.Instance;
+        
+        // スロット側の設定を強制上書き（index ずれ防止）
+        SetupHotbarSlots(toolHotbarSlots, SlotManager.SlotType.Tool);
+        SetupHotbarSlots(consumableHotbarSlots, SlotManager.SlotType.Consumable);
+        SetupHotbarSlots(freeHotbarSlots, SlotManager.SlotType.Free);
 
-        // UIがクリックされたときのコールバックを登録
-        for (int i = 0; i < hotbarSlots.Length; i++)
-        {
-            int idx = i;
-            var slot = hotbarSlots[idx];
-            // Button コンポーネント経由でクリックイベントを登録してあるならここは不要だが、
-            // シンプルに SlotManager の OnSlotClicked() を拡張するかボタンを参照しても良い。
-            // ここでは SlotManager の OnSlotClicked がログ出すだけなので、代替として Button を使う場合は変更してください.
-            var btn = slot.GetComponent<UnityEngine.UI.Button>();
-            if (btn != null)
-            {
-                btn.onClick.AddListener(() => OnHotbarClicked(idx));
-            }
-        }
+        RegisterClickEvents(toolHotbarSlots, inventoryManager.toolEntries);
+        RegisterClickEvents(consumableHotbarSlots, inventoryManager.consumableEntries);
+        RegisterClickEvents(freeHotbarSlots, inventoryManager.freeEntries);
     }
 
     private void OnEnable()
     {
-        // Inventory 変更を購読（InventorySlotManager にイベントがある前提）
-        inventoryManager.OnInventoryChanged += RefreshAll;
+        if (inventoryManager == null) inventoryManager = InventorySlotManager.Instance;
+        if (inventoryManager != null) inventoryManager.OnInventoryChanged += RefreshAll;
         RefreshAll();
     }
 
@@ -44,65 +36,60 @@ public class HotbarManager : MonoBehaviour
         if (inventoryManager != null) inventoryManager.OnInventoryChanged -= RefreshAll;
     }
 
-    // 全体更新
-    public void RefreshAll()
+    private void SetupHotbarSlots(SlotManager[] slots, SlotManager.SlotType type)
     {
-        for (int i = 0; i < hotbarSlots.Length; i++)
+        if (slots == null) return;
+        for (int i = 0; i < slots.Length; i++)
         {
-            UpdateSlot(i);
-        }
-    }
-
-    // 個別スロット更新（hotbarSlots[i] が hotbarProxies[i] の参照を表示
-    public void UpdateSlot(int hotbarIndex)
-    {
-        if (hotbarIndex < 0 || hotbarIndex >= hotbarSlots.Length) return;
-        var uiSlot = hotbarSlots[hotbarIndex];
-        if (uiSlot == null)
-        {
-            // 空にする
-            uiSlot.ClearSlot();
-            return;
-        }
-
-        var entry = inventoryManager.GetEntry(uiSlot, uiSlot.slotIndex);
-        if (entry == null || entry.IsEmpty())
-        {
-            uiSlot.ClearSlot();
-        }
-        else
-        {
-            uiSlot.SetItem(entry.item, entry.count);
-            // ホットバー側はドラッグ禁止にしておく（SlotManager 内のドラッグ処理を無効化するか、Button.interactable = trueでOK）
-            var btn = uiSlot.GetComponent<UnityEngine.UI.Button>();
-            if (btn != null) btn.interactable = true; // クリックは有効、ドラッグは UI 側で操作しない
-        }
-    }
-
-    // ホットバーの UI がクリックされた
-    private void OnHotbarClicked(int hotbarIndex)
-    {
-        Debug.Log($"Hotbar slot {hotbarIndex} clicked.");
-        if (hotbarIndex < 0 || hotbarIndex >= hotbarSlots.Length) return;
-
-        SlotManager s = hotbarSlots[hotbarIndex];
-        var entry = inventoryManager.GetEntry(s, s.slotIndex);
-        if (entry == null || entry.IsEmpty()) return;
-
-        // 装備要求（EquipController が対応）
-        EquipController.Instance.EquipFromInventorySlot(s, s.slotIndex);
-    }
-
-    // 外部から特定 Inventory スロットが変化したときに呼ぶ補助
-    public void NotifyInventorySlotChanged(int slotIndex)
-    {
-        // hotbarSlots を走査して該当する hotbar インデックスを更新
-        for (int i = 0; i < hotbarSlots.Length; i++)
-        {
-            if (hotbarSlots[i] != null && hotbarSlots[i].slotIndex == slotIndex)
+            if (slots[i] != null)
             {
-                UpdateSlot(i);
+                slots[i].slotType = type;
+                slots[i].SetSlotIndex(i);
             }
         }
+    }
+
+    private void RegisterClickEvents(SlotManager[] slots, SlotEntry[] entries)
+    {
+        if (slots == null || entries == null) return;
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == null) continue;
+            var btn = slots[i].GetComponent<UnityEngine.UI.Button>();
+            if (btn == null) continue;
+            
+            int capturedIndex = i;
+            SlotEntry[] capturedEntries = entries;
+            btn.onClick.AddListener(() => OnHotbarSlotClicked(capturedEntries, capturedIndex));
+        }
+    }
+
+    public void RefreshAll()
+    {
+        if (inventoryManager == null) return;
+        RefreshSlots(toolHotbarSlots, inventoryManager.toolEntries);
+        RefreshSlots(consumableHotbarSlots, inventoryManager.consumableEntries);
+        RefreshSlots(freeHotbarSlots, inventoryManager.freeEntries);
+    }
+
+    private void RefreshSlots(SlotManager[] slots, SlotEntry[] entries)
+    {
+        if (slots == null || entries == null) return;
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i] == null) continue;
+            if (i < entries.Length && !entries[i].IsEmpty())
+                slots[i].SetItem(entries[i].item, entries[i].count);
+            else
+                slots[i].ClearSlot();
+        }
+    }
+
+    private void OnHotbarSlotClicked(SlotEntry[] entries, int index)
+    {
+        if (entries == null || index < 0 || index >= entries.Length) return;
+        var entry = entries[index];
+        if (entry == null || entry.IsEmpty()) return;
+        EquipController.Instance?.EquipItem(entry.item, entry.count);
     }
 }

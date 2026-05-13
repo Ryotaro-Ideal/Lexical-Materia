@@ -106,6 +106,49 @@ public class LetterInvManager : MonoBehaviour
         OnLetterChanged?.Invoke();
     }
 
+    // ----- ギミックUI用の追加関数 -----
+
+    /// <summary>現在持っているすべての文字と個数を返す</summary>
+    public Dictionary<LetterData, int> GetAllAvailableLetters()
+    {
+        Dictionary<LetterData, int> dict = new Dictionary<LetterData, int>();
+        foreach (var slot in letterSlots)
+        {
+            if (slot.letterData != null && slot.Count > 0)
+            {
+                if (dict.ContainsKey(slot.letterData)) dict[slot.letterData] += slot.Count;
+                else dict[slot.letterData] = slot.Count;
+            }
+        }
+        return dict;
+    }
+
+    /// <summary>指定されたLetterDataのリスト（例：あ,け,る）を消費する</summary>
+    public void ConsumeLetters(List<LetterData> lettersToConsume)
+    {
+        foreach (var letter in lettersToConsume)
+        {
+            foreach (var slot in letterSlots)
+            {
+                if (slot.letterData == letter && slot.Count > 0)
+                {
+                    slot.AddCount(-1);
+                    if (slot.Count <= 0) slot.ClearLetter();
+                    break;
+                }
+            }
+        }
+        OnLetterChanged?.Invoke();
+    }
+
+    public void ResetSaveData()
+    {
+        foreach (var slot in letterSlots)
+            slot.ResetCount();
+        OnLetterChanged?.Invoke();
+    }
+
+
     // ===== セーブ・ロード =====
 
     /// <summary>文字インベントリの現在状態をSaveDataに書き込む</summary>

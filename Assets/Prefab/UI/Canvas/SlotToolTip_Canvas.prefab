@@ -148,9 +148,9 @@ GameObject:
   - component: {fileID: 483784880677222561}
   - component: {fileID: 459878964643967699}
   - component: {fileID: 7222796360346125907}
-  - component: {fileID: 506853748119162708}
   - component: {fileID: 7580518906393457251}
-  m_Layer: 7
+  - component: {fileID: 8512502476578413053}
+  m_Layer: 5
   m_Name: SlotToolTip_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,21 +240,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &506853748119162708
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8237286799170928393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecc9ded6245e6a042a2196684f4242c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rootCanvas: {fileID: 483784880677222561}
-  panel: {fileID: 6003125492338243380}
-  label: {fileID: 8684040601792170384}
 --- !u!225 &7580518906393457251
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -267,6 +252,21 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &8512502476578413053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8237286799170928393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac8fc032a72ed7644abf598836291cee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rootCanvas: {fileID: 483784880677222561}
+  panel: {fileID: 6003125492338243380}
+  label: {fileID: 8684040601792170384}
 --- !u!1 &8528285995643183645
 GameObject:
   m_ObjectHideFlags: 0

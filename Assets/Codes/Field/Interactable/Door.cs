@@ -4,6 +4,7 @@ using Unity.IO.LowLevel.Unsafe;
 
 public class Door : MonoBehaviour, IInteractable
 {
+    [SerializeField] protected bool isUnlocked = true;
     [SerializeField] private string interactionName = "開ける";
     [SerializeField] private Transform pivot;
     [SerializeField] private Collider doorCollider;
@@ -20,17 +21,23 @@ public class Door : MonoBehaviour, IInteractable
 
     public virtual void Interact()
     {
-        if (isAnimating) return;
+        if (isAnimating || !isUnlocked) return;
+
+        MoveDoor();
+    }
+    public void MoveDoor()
+    {
         isOpen = !isOpen;
         interactionName = isOpen ? "閉める" : "開ける";
         if (doorCollider != null)
             doorCollider.isTrigger = isOpen;
+        isAnimating = true;
         StartCoroutine(RotateDoor(isOpen ? openAngle : 0f));
     }
 
     private IEnumerator RotateDoor(float targetAngle)
     {
-        isAnimating = true;
+
 
         Quaternion startRot = pivot.localRotation;
         Quaternion endRot = Quaternion.Euler(0f, targetAngle, 0f);

@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: 3003
   itemName: "\u672C"
+  weight: 1
   visualPrefab: {fileID: 1469501219946348, guid: dcc38643064de664da273517a77330bf, type: 3}
-  icon: {fileID: 21300000, guid: 9bdb4395d31fa224da1a8453c1ff943e, type: 3}
+  icon: {fileID: 21300000, guid: 10b6a027979bba54cb5152bf0a153e1a, type: 3}
   itemType: 2
   description: "\u3053\u308C\u306F\u672C"
   maxStack: 99

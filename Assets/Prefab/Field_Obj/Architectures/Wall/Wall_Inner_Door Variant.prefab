@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87b08a942264bdf4b867366c2861ba74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isUnlocked: 0
   interactionName: "\u958B\u3051\u308B"
   pivot: {fileID: 8604482277874392048}
   doorCollider: {fileID: 5470455929062519614}

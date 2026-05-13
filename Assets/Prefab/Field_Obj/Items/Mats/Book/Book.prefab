@@ -22,31 +22,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.5000004
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.49999958
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.49999958
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.5000004
+      value: -0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -90
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 4128655433279347533, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: itemData
@@ -55,19 +55,19 @@ PrefabInstance:
     - target: {fileID: 6241357420938486822, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: -2078958989275349581, guid: 0c511339fca9af14e8671410877d900f, type: 3}
+      objectReference: {fileID: 4300000, guid: 6cc3d9c277834456be4caa69091fa584, type: 3}
     - target: {fileID: 6489269549935707687, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 4189962006397897740, guid: 0c511339fca9af14e8671410877d900f, type: 3}
+      objectReference: {fileID: 2100000, guid: e4f418a18b804f87a364a935f5632aef, type: 2}
     - target: {fileID: 7037952312481769844, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_Name
-      value: Stone
+      value: Book
       objectReference: {fileID: 0}
     - target: {fileID: 9192350490938563166, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: -2078958989275349581, guid: 0c511339fca9af14e8671410877d900f, type: 3}
+      objectReference: {fileID: 4300000, guid: 6cc3d9c277834456be4caa69091fa584, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

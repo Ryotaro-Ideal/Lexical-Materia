@@ -2,10 +2,46 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-public class EasyIconMaker
+public class EasyIconMaker : EditorWindow
 {
-    [MenuItem("Assets/Make Icon from Prefab (Transparent)")]
-    public static void MakeTransparentIcon()
+    float distanceMultiplier = 2.0f;
+    int resolution = 256;
+
+    [MenuItem("Window/EasyIconMaker")]
+    public static void OpenWindow()
+    {
+        GetWindow<EasyIconMaker>("EasyIconMaker");
+    }
+
+    void OnGUI()
+    {
+        GUILayout.Label("アイコン生成設定", EditorStyles.boldLabel);
+        EditorGUILayout.Space();
+
+        distanceMultiplier = EditorGUILayout.Slider(
+            new GUIContent(
+                "カメラ距離倍率",
+                "小さく見える → 値を下げる  /  大きく見える → 値を上げる"),
+            distanceMultiplier, 0.5f, 10f);
+
+        resolution = EditorGUILayout.IntPopup(
+            "解像度",
+            resolution,
+            new[] { "64px", "128px", "256px", "512px", "1024px" },
+            new[] { 64, 128, 256, 512, 1024 });
+
+        EditorGUILayout.Space();
+        EditorGUILayout.HelpBox(
+            "Projectウィンドウでプレハブを選択してからボタンを押してください。",
+            MessageType.Info);
+
+        GUI.enabled = Selection.activeGameObject != null;
+        if (GUILayout.Button("アイコン生成（8方向）", GUILayout.Height(36)))
+            Generate();
+        GUI.enabled = true;
+    }
+
+    void Generate()
     {
         GameObject prefab = Selection.activeGameObject;
         if (prefab == null)
@@ -14,105 +50,103 @@ public class EasyIconMaker
             return;
         }
 
-        // 1. シーンの下の方（邪魔にならない場所）で作業する
-        Vector3 workPos = new Vector3(0, -900, 0);
+        string prefabAssetPath = AssetDatabase.GetAssetPath(prefab);
+        if (string.IsNullOrEmpty(prefabAssetPath))
+        {
+            Debug.LogWarning("ProjectウィンドウからPrefabを選択してください（シーン上のオブジェクトは不可）");
+            return;
+        }
+        string saveDir = Path.GetDirectoryName(prefabAssetPath);
 
-        // 2. モデルを生成
-        GameObject instance = Object.Instantiate(prefab, workPos, Quaternion.identity);
-
-        // レイヤーをIconに変更（カメラに映すため）
         int iconLayer = LayerMask.NameToLayer("Icon");
         if (iconLayer == -1)
         {
             Debug.LogError("Layer 'Icon' がありません。Project Settings > Tags and Layers で作成する必要があります。");
-            Object.DestroyImmediate(instance);
             return;
         }
+
+        Vector3 workPos = new Vector3(0, -900, 0);
+        GameObject instance = Object.Instantiate(prefab, workPos, prefab.transform.rotation);
         SetLayerRecursively(instance, iconLayer);
 
-        // 3. バウンディングボックス（大きさ）を計算してカメラ位置を決める
         Bounds bounds = new Bounds(instance.transform.position, Vector3.zero);
         bool hasBounds = false;
-        Renderer[] renderers = instance.GetComponentsInChildren<Renderer>();
-        foreach (Renderer r in renderers)
+        foreach (Renderer r in instance.GetComponentsInChildren<Renderer>())
         {
-            if (!hasBounds)
-            {
-                bounds = r.bounds;
-                hasBounds = true;
-            }
-            else
-            {
-                bounds.Encapsulate(r.bounds);
-            }
-            // SkinnedMeshRendererが一瞬で消えるのを防ぐおまじない
             if (r is SkinnedMeshRenderer smr) smr.updateWhenOffscreen = true;
+            if (!hasBounds) { bounds = r.bounds; hasBounds = true; }
+            else bounds.Encapsulate(r.bounds);
         }
 
         if (!hasBounds)
         {
-            Debug.LogWarning("Rendererが見つかりませんでした。空のオブジェクトですか？");
+            Debug.LogWarning("Rendererが見つかりませんでした。");
             Object.DestroyImmediate(instance);
             return;
         }
 
-        // カメラ作成
+        float maxSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+        float distance = Mathf.Max(maxSize * distanceMultiplier, 1f);
+
         GameObject camObj = new GameObject("TempIconCamera");
         Camera cam = camObj.AddComponent<Camera>();
         cam.clearFlags = CameraClearFlags.SolidColor;
-        cam.backgroundColor = new Color(0, 0, 0, 0); // 透明
+        cam.backgroundColor = new Color(0, 0, 0, 0);
         cam.cullingMask = 1 << iconLayer;
-
-        // 【重要】オブジェクトの正面斜め上から見るように配置
-        // 中心点(bound.center)から、少し手前に引く
-        float maxSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
-        float distance = maxSize * 2.0f; // 大きさに合わせて距離調整
-        if (distance < 1f) distance = 1f;
-
-        // カメラを配置：斜め上からのアングル
         cam.transform.position = bounds.center + new Vector3(0, distance * 0.5f, -distance);
         cam.transform.LookAt(bounds.center);
 
-        // 少し回転させて見栄え良くする
-        instance.transform.rotation = Quaternion.Euler(0, -30f, 0);
-        // 回転させたのでBoundsが変わるかもしれないが、大体は収まるはず
-
-        // 4. 撮影
-        int resolution = 256;
         RenderTexture rt = RenderTexture.GetTemporary(resolution, resolution, 24);
         cam.targetTexture = rt;
-        cam.Render();
 
-        RenderTexture.active = rt;
-        Texture2D tex = new Texture2D(resolution, resolution, TextureFormat.RGBA32, false);
-        tex.ReadPixels(new Rect(0, 0, resolution, resolution), 0, 0);
-        tex.Apply();
+        Quaternion baseRotation = instance.transform.rotation;
+        string[] savedPaths = new string[8];
 
-        // 5. 保存
-        byte[] bytes = tex.EncodeToPNG();
-        string path = $"Assets/Icons/{prefab.name}_icon.png";
-        string dir = Path.GetDirectoryName(path);
-        if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-        File.WriteAllBytes(path, bytes);
+        for (int i = 0; i < 8; i++)
+        {
+            float yAngle = i * 45f;
+            instance.transform.rotation = baseRotation * Quaternion.Euler(0, yAngle, 0);
 
-        // 6. 後片付け
-        RenderTexture.active = null;
+            cam.Render();
+
+            RenderTexture.active = rt;
+            Texture2D tex = new Texture2D(resolution, resolution, TextureFormat.RGBA32, false);
+            tex.ReadPixels(new Rect(0, 0, resolution, resolution), 0, 0);
+            tex.Apply();
+            RenderTexture.active = null;
+
+            string fileName = $"{prefab.name}_icon_{(int)yAngle}.png";
+            string fullPath = Path.Combine(saveDir, fileName).Replace("\\", "/");
+            File.WriteAllBytes(fullPath, tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+
+            savedPaths[i] = fullPath;
+        }
+
         cam.targetTexture = null;
         RenderTexture.ReleaseTemporary(rt);
         Object.DestroyImmediate(camObj);
         Object.DestroyImmediate(instance);
 
         AssetDatabase.Refresh();
-        Debug.Log($"<b>[EasyIconMaker]</b> Created: {path}");
+
+        foreach (string assetPath in savedPaths)
+        {
+            TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            if (importer == null) continue;
+            importer.textureType = TextureImporterType.Sprite;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.SaveAndReimport();
+        }
+
+        Debug.Log($"<b>[EasyIconMaker]</b> {savedPaths.Length}枚のSpriteを生成しました → {saveDir}");
     }
 
-    private static void SetLayerRecursively(GameObject obj, int newLayer)
+    static void SetLayerRecursively(GameObject obj, int newLayer)
     {
         if (obj == null) return;
         obj.layer = newLayer;
         foreach (Transform child in obj.transform)
-        {
             SetLayerRecursively(child.gameObject, newLayer);
-        }
     }
 }

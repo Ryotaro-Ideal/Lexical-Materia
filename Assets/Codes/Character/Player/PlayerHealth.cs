@@ -28,12 +28,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         inputHandler = GetComponent<InputHandler>();
         OnHPChanged?.Invoke(currentHP, maxHP);
     }
-    public void TakeDamage(int damage, Vector3 attackerPosition)
+    public void TakeDamage(int damage, Transform attacker)
     {
         if (currentHP <= 0 || invincibleController.IsInvincible) return;
         currentHP -= damage;
         invincibleController.StartInvincibility();
-        Vector3 directionToAttacker = (transform.position - attackerPosition).normalized;
+        Vector3 directionToAttacker = (transform.position - attacker.position).normalized;
         moveController.Knockback(directionToAttacker);
         animationController.TriggerDamaged();
         OnDamaged?.Invoke();
@@ -46,7 +46,6 @@ public class PlayerHealth : MonoBehaviour, IDamageable
     }
     void Die()
     {
-        invincibleController.StopInvincibility();
         inputHandler.enabled = false;
         moveController.StopMove();
         SaveManager.Instance.ClearItemSaveAndKeepLetters();

@@ -10,7 +10,8 @@ public class SlotManager : SlotBase, IPointerEnterHandler, IPointerExitHandler
         Tool,
         Consumable,
         Inventory,
-        BreakItem
+        BreakItem,
+        Free
     }
 
     public SlotType slotType;

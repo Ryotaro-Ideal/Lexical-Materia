@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 public enum ItemType
 {
-    Consumable,     // 消費アイテム（食べ物やポーションなど）
-    Tool,      // 装備品（斧、防具など）
-    Material,       // 分解前の収集アイテム（木の枝など）
+    Consumable,
+    Tool,
+    Material,
 }
 [System.Serializable]
 public class DestroyMaterial
@@ -23,6 +23,7 @@ public class ItemData : ScriptableObject
     [Header("識別子: (1:Too, 2:Con, 3:Mat)+3桁数字")]
     public string ID;
     public string itemName;
+    public int weight = 1;
 
     public GameObject visualPrefab;
     public Sprite icon;
@@ -34,6 +35,7 @@ public class ItemData : ScriptableObject
     [Header("クラフト・分解情報")]
 
     public int maxStack = 99;
+
 
 
     public List<DestroyMaterial> destroyMaterials = new List<DestroyMaterial>();

@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4017868157609291575, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -58,7 +70,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 9a831dc5c32c94bc7bb4c555bffe1950, type: 2}
     - target: {fileID: 7037952312481769844, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_Name
-      value: ItemBase Variant 1
+      value: Pen
       objectReference: {fileID: 0}
     - target: {fileID: 9192350490938563166, guid: 6b9d41c5bcd091d4e850d159591d11cd, type: 3}
       propertyPath: m_Mesh
